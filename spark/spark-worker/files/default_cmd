@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source /root/spark_files/configure_spark.sh
+
+echo "preparing Spark"
+prepare_spark $1
+
+echo "starting Hadoop Datanode"
+service hadoop-datanode start
+
+sleep 5
+
+echo "starting Spark Worker"
+cp /root/spark_worker_files/run_spark_worker.sh /
+chmod a+rx /run_spark_worker.sh
+sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME /run_spark_worker.sh $2

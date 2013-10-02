@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SPARK_VERSION=0.7.3
+
+MASTER=$(sudo docker run -i -t -d spark-master:$SPARK_VERSION)
+echo "started master container:   $MASTER"
+sleep 30
+MASTER_IP=$(sudo docker logs $MASTER 2>&1 | egrep '^MASTER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
+echo "MASTER_IP: $MASTER_IP"
+WORKER=$(sudo docker run -d spark-worker:${SPARK_VERSION} ${MASTER_IP} spark://${MASTER_IP}:7077)
+echo "started worker container    $WORKER"
+echo ""
+echo "connect to spark via:       sudo docker run -i -t spark-shell:$SPARK_VERSION $MASTER_IP"
+echo ""
+echo "visit Spark WebUI at:       http://$MASTER_IP:8080/"
+echo "visit Hadoop Namenode at:   http://$MASTER_IP:50070"
+echo ""
+echo "kill cluster via:           sudo docker kill $MASTER"
