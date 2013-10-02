@@ -1,0 +1,1 @@
+sudo docker build -t spark-shell:0.7.3 .

@@ -1,0 +1,1 @@
+docker build -t apache-hadoop-hdfs-precise:1.2.1 .

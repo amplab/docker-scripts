@@ -1,0 +1,22 @@
+#!/bin/bash
+
+env
+
+source /root/spark_files/configure_spark.sh
+
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "MASTER_IP=$IP"
+
+echo "preparing Spark"
+prepare_spark $IP
+
+echo "starting Hadoop Namenode"
+sudo -u hdfs hadoop namenode -format
+service hadoop-namenode start
+
+sleep 5
+
+echo "starting Spark Master"
+cp /root/spark_master_files/run_spark_master.sh /
+chmod a+rx /run_spark_master.sh
+sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME /run_spark_master.sh $IP

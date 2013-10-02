@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source /root/spark_files/configure_spark.sh
+
+env
+
+echo "preparing Spark"
+prepare_spark $1
+
+echo "adding test data to HDFS"
+cp /root/spark_shell_files/test.txt /tmp
+sudo -u hdfs hadoop fs -put /tmp/test.txt hdfs://$1:9000/user/hdfs/test.txt
+
+echo "starting Spark Shell"
+cd $SPARK_HOME
+sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME MASTER=spark://10.0.3.8:7077 HDFS_PREFIX=hdfs://10.0.3.8:9000 ./spark-shell
