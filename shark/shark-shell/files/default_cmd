@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source /root/shark_files/configure_shark.sh
+prepare_shark $1
+env
+cd /opt/metastore && sudo -u hdfs /opt/shark-$SHARK_VERSION/bin/shark
