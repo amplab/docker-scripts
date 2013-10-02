@@ -133,3 +133,15 @@ which is the location the configure script of spark-base was copied to.
  
 
 The spark-worker default command proceeds along the same lines but starts a Spark worker with a Hadoop datanode instead.
+
+## Maintaining local Docker image repository
+
+After a while building and debugging images the local image repository gets
+full of intermediate images that serve no real purpose other than
+debugging a broken build. To remove these do
+
+	sudo docker images | grep "<none>" | awk '{print $3}' | xargs sudo docker rmi
+
+Also data from stopped containers tend to accumulate. In order to remove all container data (__only do when no containers are running__) do
+
+	sudo docker rm `sudo docker ps -a -q`
