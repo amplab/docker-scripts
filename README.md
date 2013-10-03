@@ -14,32 +14,31 @@ apache-hadoop-hdfs-precise -> spark-base -> spark-{master, worker, shell}
 
 apache-hadoop-hdfs-precise -> spark-base -> shark-base -> shark-{master, worker, shell}
 
+In order to build all images in the correct order initially do
+
+	cd docker
+	./build
+
 You can (re-)build single images by cd-ing into the image directory and doing
 
 	. build
 
-In order to build all images in the correct order initially follow the steps
-below.
-
-1. Hadoop base image:
-
-	cd apache-hadoop-hdfs-precise
-
-	. build
-
-2. Spark:
-
-	cd spark/build
-
-	./build
-
-3. Shark:
-
-	cd shark/build
-
-	./build
-
 ## Testing
+
+There are deploy scripts for both a standalone Spark cluster and
+a standalone Spark/Shark cluster. In addition to Spark (and Shark)
+the cluster also runs a Hadoop HDFS filesystem. When the deploy
+script is run it generates one container for the master node,
+one container for each worker node and one extra container running
+a Dnsmasq DNS forwarder. The latter one can also be used to resolve
+node names on the host, for example to access the worker logs via
+the Spark web UI. Each node also runs a sshd which is pre-configured
+with the given ssh RSA keys.
+
+Both the Spark and Shark shells are started in a separate container.
+This container can be directly started from the deploy scripts by
+passing "-c" to the deploy script.
+
 
 ### Spark
 
