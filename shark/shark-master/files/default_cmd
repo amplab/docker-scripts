@@ -10,6 +10,7 @@ echo "MASTER_IP=$IP"
 prepare_shark $IP
 sudo -u hdfs hadoop namenode -format
 service hadoop-namenode start
+/usr/sbin/sshd
 sleep 5
 cp /root/shark_master_files/run_shark_master.sh /
 chmod a+rx /run_shark_master.sh

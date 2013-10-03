@@ -5,8 +5,11 @@
 
 source /root/shark_files/configure_shark.sh
 
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "WORKER_IP=$IP"
 prepare_shark $1
 service hadoop-datanode start
+/usr/sbin/sshd
 sleep 5
 cp /root/shark_worker_files/run_shark_worker.sh /
 chmod a+rx /run_shark_worker.sh
