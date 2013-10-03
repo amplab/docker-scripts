@@ -5,6 +5,13 @@
 Dockerfiles to build Spark 0.7.3 and Shark 0.7.0 images for testing and
 development.
 
+## Requirements
+
+Tested on Ubuntu 12.04 Docker version 0.6.3 with the virtual
+switch
+	lxcbr0
+enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker.io).
+
 ## Building
 
 The steps need to be followed in this order due to the
@@ -48,6 +55,30 @@ passing "-c" to the deploy script.
 4. follow the command to start the spark-shell container
 5. execute the steps inside test.spark
 
+Note: after the cluster is up you should see something like this:
+
+<pre>
+started nameserver container:  c1f90063f51a
+NAMESERVER_IP:                 10.0.3.129
+started master container:      bbd5a7679463
+MASTER_IP:                     10.0.3.130
+started worker container:  9a1c8890ea92
+started worker container:  ac1cc62f2980
+
+***********************************************************************
+connect to spark via:       sudo docker run -i -t -dns 10.0.3.129 spark-shell:0.7.3 10.0.3.130
+
+visit Spark WebUI at:       http://10.0.3.130:8080/
+visit Hadoop Namenode at:   http://10.0.3.130:50070
+ssh into master via:        ssh -i ../../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@10.0.3.130
+
+kill cluster via:           sudo docker kill bbd5a7679463
+***********************************************************************
+
+to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:
+nameserver 10.0.3.129
+</pre>
+
 ### Shark
 
 1.	cd shark/deploy
@@ -55,6 +86,30 @@ passing "-c" to the deploy script.
 3. wait for the "cluster" to come up
 4. follow the command to start the shark-shell container
 5. execute the steps inside test.shark
+
+Note: after the cluster is up you should see something like this:
+
+<pre>
+started nameserver container:  654cdabbbe18
+NAMESERVER_IP:                 10.0.3.133
+started master container:      b0590e23e035
+MASTER_IP:                     10.0.3.134
+started worker container    42893bbd747a
+started worker container    117665ebaf60
+
+***********************************************************************
+connect to shark via:       sudo docker run -i -t -dns 10.0.3.133 shark-shell:0.7.0 10.0.3.134
+
+visit Spark WebUI at:       http://10.0.3.134:8080/
+visit Hadoop Namenode at:   http://10.0.3.134:50070
+ssh into master via:        ssh -i ../../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@10.0.3.134
+
+kill cluster via:           sudo docker kill b0590e23e035
+***********************************************************************
+
+to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:
+nameserver 10.0.3.133
+</pre>
 
 ## Best practices for Dockerfiles and startup scripts
 
@@ -133,7 +188,20 @@ which is the location the configure script of spark-base was copied to.
 
 The spark-worker default command proceeds along the same lines but starts a Spark worker with a Hadoop datanode instead.
 
-## Maintaining local Docker image repository
+## Tips
+
+### Name resolution on host
+
+In order to resolve names (such as "master", "worker1", etc.) add the IP
+of the nameserver container to the top of /etc/resolv.conf on the host.
+
+
+### Killing all containers at once
+
+This is a one-line script to kill all running containers at once:
+	docker/kill_all
+
+### Maintaining local Docker image repository
 
 After a while building and debugging images the local image repository gets
 full of intermediate images that serve no real purpose other than
