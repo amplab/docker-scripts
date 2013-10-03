@@ -14,9 +14,12 @@ echo "starting Hadoop Namenode"
 sudo -u hdfs hadoop namenode -format
 service hadoop-namenode start
 
+echo "starting sshd"
+/usr/sbin/sshd
+
 sleep 5
 
 echo "starting Spark Master"
 cp /root/spark_master_files/run_spark_master.sh /
 chmod a+rx /run_spark_master.sh
-sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME /run_spark_master.sh $IP
+sudo -u hdfs /run_spark_master.sh $IP
