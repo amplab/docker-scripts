@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "killing all running docker containers in one second"
+sleep 1
+sudo docker kill `sudo docker ps -q`

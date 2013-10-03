@@ -3,7 +3,10 @@
 hadoop_files=( "/root/hadoop_files/core-site.xml"  "/root/hadoop_files/hdfs-site.xml" )
 
 function create_hadoop_directories() {
-    :
+    rm -rf /root/.ssh
+    mkdir /root/.ssh
+    chmod go-rx /root/.ssh
+    mkdir /var/run/sshd
 }
 
 function deploy_hadoop_files() {
@@ -12,11 +15,19 @@ function deploy_hadoop_files() {
         filename=$(basename $i);
         cp $i /etc/hadoop/$filename;
     done
+    cp /root/hadoop_files/id_rsa /root/.ssh
+    chmod go-rwx /root/.ssh/id_rsa
+    cp /root/hadoop_files/authorized_keys /root/.ssh/authorized_keys
+    chmod go-wx /root/.ssh/authorized_keys
 }		
 
 function configure_hadoop() {
     sed -i s/__MASTER__/$1/ /etc/hadoop/core-site.xml
-    sed -i s/"JAVA_HOME=\/usr\/lib\/jvm\/java-6-sun"/"JAVA_HOME=\/usr\/lib\/jvm\/java-6-openjdk-amd64"/ /etc/hadoop/hadoop-env.sh
+    sed -i s/"JAVA_HOME=\/usr\/lib\/jvm\/java-6-sun"/"JAVA_HOME=\/usr\/lib\/jvm\/java-7-openjdk-amd64"/ /etc/hadoop/hadoop-env.sh
+    # Docker messes up /etc/hosts and adds two entries for 127.0.0.1
+    # we try to recover from that by giving /etc/resolv.conf and therefore
+    # the nameserver priority
+    sed -i s/"files dns"/"dns files"/ /etc/nsswitch.conf
 }
 
 function prepare_hadoop() {

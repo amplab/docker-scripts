@@ -15,10 +15,17 @@ function create_spark_directories() {
 
 function deploy_spark_files() {
     deploy_hadoop_files
+    cp /root/spark_files/spark-env.sh /opt/spark-$SPARK_VERSION/conf/
 }		
 
 function configure_spark() {
     configure_hadoop $1
+
+    LOCAL_IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+    sed -i s/__MASTER__/$1/ /opt/spark-$SPARK_VERSION/conf/spark-env.sh
+    #sed -i s/__LOCAL_IP__/$LOCAL_IP/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
+    sed -i s/__SPARK_HOME__/"\/opt\/spark-${SPARK_VERSION}"/ /opt/spark-$SPARK_VERSION/conf/spark-env.sh
+    sed -i s/__JAVA_HOME__/"\/usr\/lib\/jvm\/java-7-openjdk-amd64"/ /opt/spark-$SPARK_VERSION/conf/spark-env.sh
 }
 
 function prepare_spark() {
