@@ -1,6 +1,6 @@
 #!/bin/bash
 
-spark_dirs=$(ls -d ../spark*)
+spark_dirs=$(ls -d spark*)
 dir_list=("$spark_dirs")
 
 # NOTE: the order matters but this is the right one
@@ -9,5 +9,5 @@ for i in ${dir_list[@]}; do
 	cd $i;
 	cat build;
 	. build;
-	cd ../build;
+	cd ..;
 done

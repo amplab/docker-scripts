@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 export SCALA_HOME=/opt/scala-2.9.3
 export SPARK_HOME=__SPARK_HOME__
-export SPARK_MEM=512m
-export SHARK_MASTER_MEM=512m
+export SPARK_WORKER_CORES=1
+export SPARK_MEM=700m
+export SHARK_MASTER_MEM=700m
 export HIVE_HOME=__HIVE_HOME__
 export HADOOP_HOME="/etc/hadoop"
 export MASTER="spark://__MASTER__:7077"
+#export SPARK_MASTER_IP=__MASTER__
+#export SPARK_LOCAL_IP=__LOCAL_IP__
 SPARK_JAVA_OPTS="-Dspark.local.dir=/tmp/spark "
 SPARK_JAVA_OPTS+="-Dspark.kryoserializer.buffer.mb=10 "
 SPARK_JAVA_OPTS+="-verbose:gc -XX:-PrintGCDetails -XX:+PrintGCTimeStamps "

@@ -29,10 +29,12 @@ function deploy_shark_files() {
 function configure_shark() {
     configure_spark $1
     # Shark
+    LOCAL_IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
     sed -i s/__MASTER__/$1/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
+    #sed -i s/__LOCAL_IP__/$LOCAL_IP/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
     sed -i s/__SPARK_HOME__/"\/opt\/spark-${SPARK_VERSION}"/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
     sed -i s/__HIVE_HOME__/"\/opt\/hive-${HIVE_VERSION}-bin"/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
-    sed -i s/__JAVA_HOME__/"\/usr\/lib\/jvm\/java-6-openjdk-amd64"/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
+    sed -i s/__JAVA_HOME__/"\/usr\/lib\/jvm\/java-7-openjdk-amd64"/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
     # Hive
     sed -i s/__MASTER__/$1/ /opt/hive-0.9.0-bin/conf/hive-site.xml
 }

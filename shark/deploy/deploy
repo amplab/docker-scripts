@@ -1,18 +1,61 @@
-#!/bin/sh
+#!/bin/bash
 
 SHARK_VERSION=0.7.0
 
-MASTER=$(sudo docker run -i -t -d shark-master:$SHARK_VERSION)
-echo "started master container:   $MASTER"
-sleep 60
+# this will indicate whether we start a shell directly here
+connect_directly=0
+
+if [[ "$#" -eq 1 ]] && [[ "$1" == "-c" ]];
+then
+    connect_directly=1
+fi
+
+rm -rf /tmp/dnsdir
+mkdir /tmp/dnsdir
+
+NAMESERVER=$(sudo docker run -d -h nameserver -v /tmp/dnsdir:/etc/dnsmasq.d dnsmasq-precise)
+echo "started nameserver container:  $NAMESERVER"
+sleep 3
+NAMESERVER_IP=$(sudo docker logs $NAMESERVER 2>&1 | egrep '^NAMESERVER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
+echo "NAMESERVER_IP:                 $NAMESERVER_IP"
+
+MASTER=$(sudo docker run -i -t -d -dns $NAMESERVER_IP -h master shark-master:$SHARK_VERSION)
+echo "started master container:      $MASTER"
+sleep 3
 MASTER_IP=$(sudo docker logs $MASTER 2>&1 | egrep '^MASTER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
-echo "MASTER_IP: $MASTER_IP"
-WORKER=$(sudo docker run -d shark-worker:${SHARK_VERSION} ${MASTER_IP} spark://${MASTER_IP}:7077)
-echo "started worker container    $WORKER"
+echo "MASTER_IP:                     $MASTER_IP"
+
+echo "address=\"/nameserver/$NAMESERVER_IP\"" > /tmp/dnsdir/0hosts
+echo "address=\"/master/$MASTER_IP\"" >> /tmp/dnsdir/0hosts
+
+sleep 10
+
+NUM_WORKERS=2
+
+for i in `seq 1 $NUM_WORKERS`; do
+    hostname="worker${i}"
+    WORKER=$(sudo docker run -d -dns $NAMESERVER_IP -h $hostname shark-worker:${SHARK_VERSION} ${MASTER_IP} spark://${MASTER_IP}:7077)
+    echo "started worker container    $WORKER"
+    sleep 3
+    WORKER_IP=$(sudo docker logs $WORKER 2>&1 | egrep '^WORKER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
+    echo "address=\"/$hostname/$WORKER_IP\"" >> /tmp/dnsdir/0hosts
+done
+sleep 3
 echo ""
-echo "connect to shark via:       sudo docker run -i -t shark-shell:$SHARK_VERSION $MASTER_IP"
+echo "***********************************************************************"
+echo "connect to shark via:       sudo docker run -i -t -dns $NAMESERVER_IP shark-shell:$SHARK_VERSION $MASTER_IP"
 echo ""
 echo "visit Spark WebUI at:       http://$MASTER_IP:8080/"
 echo "visit Hadoop Namenode at:   http://$MASTER_IP:50070"
+echo "ssh into master via:        ssh -i ../../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${MASTER_IP}"
 echo ""
 echo "kill cluster via:           sudo docker kill $MASTER"
+echo "***********************************************************************"
+echo ""
+echo "to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:"
+echo "nameserver $NAMESERVER_IP"
+
+if [[ $connect_directly -eq 1 ]];
+then
+    sudo docker run -i -t shark-shell:$SHARK_VERSION $MASTER_IP
+fi

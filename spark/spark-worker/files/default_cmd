@@ -13,4 +13,4 @@ sleep 5
 echo "starting Spark Worker"
 cp /root/spark_worker_files/run_spark_worker.sh /
 chmod a+rx /run_spark_worker.sh
-sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME /run_spark_worker.sh $2
+sudo -u hdfs SPARK_HOME=$SPARK_HOME SPARK_VERSION=$SPARK_VERSION SCALA_HOME=$SCALA_HOME SPARK_WORKER_CORES=1 /run_spark_worker.sh $2
