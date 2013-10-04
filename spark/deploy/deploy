@@ -28,7 +28,7 @@ echo "MASTER_IP:                     $MASTER_IP"
 echo "address=\"/nameserver/$NAMESERVER_IP\"" > /tmp/dnsdir/0hosts
 echo "address=\"/master/$MASTER_IP\"" >> /tmp/dnsdir/0hosts
 
-sleep 10
+sleep 40
 
 NUM_WORKERS=2
 
