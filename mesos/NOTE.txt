@@ -1,0 +1,2 @@
+For build place pre-compiled mesos installation into file:
+mesos/mesos-base/files/mesos.tgz

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+env
+
+source /root/mesos_files/configure_mesos.sh
+
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "MASTER_IP=$IP"
+
+echo "preparing Mesos"
+prepare_mesos $IP
+
+echo "starting Hadoop Namenode"
+sudo -u hdfs hadoop namenode -format
+service hadoop-namenode start
+
+echo "starting sshd"
+/usr/sbin/sshd
+
+sleep 5
+
+echo "starting Mesos Master"
+cp /root/mesos_master_files/run_mesos_master.sh /
+chmod a+rx /run_mesos_master.sh
+sudo -u hdfs LD_LIBRARY_PATH=$LD_LIBRARY_PATH /run_mesos_master.sh $IP
