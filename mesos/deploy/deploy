@@ -1,14 +1,6 @@
 #!/bin/sh
 
-SPARK_VERSION=0.7.3
-
-# this will indicate whether we start a shell directly here
-connect_directly=0
-
-if [ "$#" -eq 1 -a "$1" = "-c" ];
-then
-    connect_directly=1
-fi
+MESOS_VERSION=0.13.0
 
 rm -rf /tmp/dnsdir
 mkdir /tmp/dnsdir
@@ -19,7 +11,7 @@ sleep 3
 NAMESERVER_IP=$(sudo docker logs $NAMESERVER 2>&1 | egrep '^NAMESERVER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
 echo "NAMESERVER_IP:                 $NAMESERVER_IP"
 
-MASTER=$(sudo docker run -i -t -d -dns $NAMESERVER_IP -h master spark-master:$SPARK_VERSION)
+MASTER=$(sudo docker run -i -t -d -dns $NAMESERVER_IP -h master mesos-master:$MESOS_VERSION)
 echo "started master container:      $MASTER"
 sleep 3
 MASTER_IP=$(sudo docker logs $MASTER 2>&1 | egrep '^MASTER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
@@ -34,7 +26,7 @@ NUM_WORKERS=2
 
 for i in `seq 1 $NUM_WORKERS`; do
     hostname="worker${i}"
-    WORKER=$(sudo docker run -d -dns $NAMESERVER_IP -h $hostname spark-worker:${SPARK_VERSION} ${MASTER_IP} spark://${MASTER_IP}:7077)
+    WORKER=$(sudo docker run -d -dns $NAMESERVER_IP -h $hostname mesos-worker:${MESOS_VERSION} ${MASTER_IP} ${MASTER_IP}:5050)
     echo "started worker container:  $WORKER"
     sleep 3
     WORKER_IP=$(sudo docker logs $WORKER 2>&1 | egrep '^WORKER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
@@ -43,19 +35,13 @@ done
 sleep 3
 echo ""
 echo "***********************************************************************"
-echo "connect to spark via:       sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP"
-echo ""
-echo "visit Spark WebUI at:       http://$MASTER_IP:8080/"
+echo "visit Mesos WebUI at:       http://$MASTER_IP:5050/"
 echo "visit Hadoop Namenode at:   http://$MASTER_IP:50070"
 echo "ssh into master via:        ssh -i ../../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${MASTER_IP}"
 echo ""
-echo "kill cluster via:           sudo docker kill $MASTER"
+echo "kill cluster via:           docker/kill_all"
 echo "***********************************************************************"
 echo ""
 echo "to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:"
 echo "nameserver $NAMESERVER_IP"
 
-if [ $connect_directly -eq 1 ];
-then
-    sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP
-fi

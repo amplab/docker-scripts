@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source /root/mesos_files/configure_mesos.sh
+
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "WORKER_IP=$IP"
+
+echo "preparing Mesos"
+prepare_mesos $1
+
+echo "starting Hadoop Datanode"
+service hadoop-datanode start
+
+echo "starting sshd"
+/usr/sbin/sshd
+
+sleep 5
+
+echo "starting Mesos Worker"
+cp /root/mesos_worker_files/run_mesos_worker.sh /
+chmod a+rx /run_mesos_worker.sh
+sudo -u hdfs HADOOP_HOME=$HADOOP_HOME LD_LIBRARY_PATH=$LD_LIBRARY_PATH /run_mesos_worker.sh $2 $IP

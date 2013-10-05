@@ -1,0 +1,1 @@
+sudo docker build -t mesos-worker:0.13.0 .
