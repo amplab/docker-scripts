@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SPARK_VERSION=0.7.3
+SPARK_VERSION=0.8.0
 
 # this will indicate whether we start a shell directly here
 connect_directly=0
