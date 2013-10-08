@@ -7,6 +7,8 @@ function create_spark_directories() {
     rm -rf /opt/spark-$SPARK_VERSION/work
     mkdir -p /opt/spark-$SPARK_VERSION/work
     chown hdfs.hdfs /opt/spark-$SPARK_VERSION/work
+    mkdir /tmp/spark
+    chown hdfs.hdfs /tmp/spark
     # this one is for Spark shell logging
     rm -rf /var/lib/hadoop/hdfs
     mkdir -p /var/lib/hadoop/hdfs

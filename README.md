@@ -2,7 +2,7 @@
 
 ## Contents
 
-Dockerfiles to build Spark 0.7.3 and Shark 0.7.0 images for testing and
+Dockerfiles to build Spark and Shark images for testing and
 development.
 
 ## Requirements
@@ -46,6 +46,9 @@ Both the Spark and Shark shells are started in a separate container.
 This container can be directly started from the deploy scripts by
 passing "-c" to the deploy script.
 
+__Note:__ The Spark and Shark clusters run completely independently.
+That means that the Shark scripts also start Spark internally, there
+is no need to do so manually.
 
 ### Spark
 
@@ -80,6 +83,10 @@ nameserver 10.0.3.129
 </pre>
 
 ### Shark
+
+__Note:__ The Shark cluster images inherit from (depend on) the Spark
+images. So you do not need to start Spark separately, this is done
+automatically.
 
 1.	cd shark/deploy
 2.	sudo ./deploy
