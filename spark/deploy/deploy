@@ -11,6 +11,29 @@ if [[ "$USER" != "root" ]]; then
    exit 1
 fi
 
+start_shell=0
+VOLUME_MAP=""
+
+while getopts ":cv:h" opt; do
+    case $opt in
+    h)
+        echo "usage: $0 [-v data_directory] [-c]"
+        exit 0
+      ;;
+    c)
+        start_shell=1
+      ;;
+    v)
+        VOLUME_MAP=$OPTARG
+      ;;
+  esac
+done
+
+if [ ! "$VOLUME_MAP" == "" ]; then
+    echo "data volume chosen: $VOLUME_MAP"
+    VOLUME_MAP="-v $VOLUME_MAP:/data"
+fi
+
 source ../../dnsmasq-precise/deploy/start_nameserver.sh
 source start_spark_cluster.sh
 
@@ -24,7 +47,7 @@ sleep 3
 print_cluster_info
 
 # parameter -c causes us to directly fall into a Spark shell
-if [[ "$#" -eq 1 ]] && [[ "$1" == "-c" ]];
+if [[ "$start_shell" -eq 1 ]];
 then
     sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP
 fi
