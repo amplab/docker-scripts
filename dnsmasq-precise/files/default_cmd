@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# run this as:
-#   sudo docker run -d -v /tmp/dnsdir:/etc/dnsmasq.d dnsmasq-precise
-
 IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
 echo "NAMESERVER_IP=$IP"
 

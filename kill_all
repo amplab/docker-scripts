@@ -13,10 +13,12 @@ if [ "$#" -ne "1" ]; then
     exit 1;
 fi
 
-clustertype=$1
+if [[ "$USER" != "root" ]]; then
+   echo "please run as: sudo $0"
+   exit 1
+fi
 
-sudo echo "killing containers of $1" # sudo in order to avoid subshells to fail
-sleep 1
+clustertype=$1
 
 if [[ "$clustertype" == "nameserver" ]]; then
     nameserver=$(sudo docker ps | grep dnsmasq_files | awk '{print $1}' | tr '\n' ' ')

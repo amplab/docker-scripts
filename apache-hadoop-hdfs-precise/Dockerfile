@@ -3,14 +3,14 @@
 FROM ubuntu:precise
 MAINTAINER AMPLab amplab@berkeley.edu
 
+# Setup a volume for data
+VOLUME ["/data"]
+
 # Set correct source list
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 
-# Upgrade package index
-RUN apt-get update
-
 # install a few other useful packages plus Open Jdk 7
-RUN apt-get install -y less openjdk-7-jre-headless net-tools vim-tiny sudo openssh-server iputils-ping
+RUN apt-get update && apt-get upgrade -y && apt-get install -y less openjdk-7-jre-headless net-tools vim-tiny sudo openssh-server iputils-ping
 
 # Install Hadoop
 ADD http://mirror.sdunix.com/apache/hadoop/common/hadoop-1.2.1/hadoop_1.2.1-1_x86_64.deb /root/
