@@ -29,13 +29,14 @@ function start_spark_workers() {
 
 # prints out information on the cluster
 function print_cluster_info() {
+    BASEDIR=$(cd $(dirname $0); pwd)"/../.."
     echo ""
     echo "***********************************************************************"
     echo "connect to spark via:       sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP"
     echo ""
     echo "visit Spark WebUI at:       http://$MASTER_IP:8080/"
     echo "visit Hadoop Namenode at:   http://$MASTER_IP:50070"
-    echo "ssh into master via:        ssh -i ../../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${MASTER_IP}"
+    echo "ssh into master via:        ssh -i $BASEDIR/apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${MASTER_IP}"
     echo ""
     echo "kill cluster via:           sudo docker kill $MASTER"
     echo "***********************************************************************"

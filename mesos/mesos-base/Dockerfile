@@ -1,9 +1,10 @@
 # Base Ubuntu Precise 12.04 LTS image
 #
-FROM apache-hadoop-hdfs-precise:1.2.1
+FROM shark-base:0.7.0
 MAINTAINER AMPLab amplab@berkeley.edu
 
-RUN apt-get install -y libcurl4-openssl-dev
+#RUN apt-get install -y libcurl4-openssl-dev
+RUN apt-get install -y libcurl3
 
 # add Hadoop config file templates
 # NOTE: we rather do this as a single ADD statement
@@ -14,7 +15,5 @@ RUN apt-get install -y libcurl4-openssl-dev
 #       https://github.com/dotcloud/docker/issues/1171
 ADD files /root/mesos_files
 
-RUN (mv /root/mesos_files/mesos.tgz / && cd / && gunzip < mesos.tgz)|(cd /opt && tar -xvf -)
-RUN (rm /mesos.tgz && ln -s /opt/mesos /tmp/mesos)
+RUN (mv /root/mesos_files/mesos.tgz / && cd / && gunzip < mesos.tgz)|(cd /opt && tar -xvf -) && (rm /mesos.tgz && ln -s /opt/mesos /tmp/mesos)
 
-ENV LD_LIBRARY_PATH /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server
