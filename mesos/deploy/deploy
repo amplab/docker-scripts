@@ -2,6 +2,11 @@
 
 MESOS_VERSION=0.13.0
 
+if [[ "$USER" != "root" ]]; then
+   echo "please run as: sudo $0"
+   exit 1
+fi
+
 rm -rf /tmp/dnsdir
 mkdir /tmp/dnsdir
 

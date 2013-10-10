@@ -6,6 +6,11 @@ SPARK_VERSION=0.8.0
 # set this value to the number of workers you want
 NUM_WORKERS=2
 
+if [[ "$USER" != "root" ]]; then
+   echo "please run as: sudo $0"
+   exit 1
+fi
+
 source ../../dnsmasq-precise/deploy/start_nameserver.sh
 source ../../spark/deploy/start_spark_cluster.sh
 
