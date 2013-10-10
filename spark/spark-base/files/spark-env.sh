@@ -7,8 +7,6 @@ export SPARK_WORKER_MEMORY=700m
 export SPARK_WORKER_CORES=1
 export HADOOP_HOME="/etc/hadoop"
 export MASTER="spark://__MASTER__:7077"
-#export SPARK_MASTER_IP=__MASTER__
-#export SPARK_LOCAL_IP=__LOCAL_IP__
 SPARK_JAVA_OPTS="-Dspark.local.dir=/tmp/spark "
 SPARK_JAVA_OPTS+="-Dspark.kryoserializer.buffer.mb=10 "
 SPARK_JAVA_OPTS+="-verbose:gc -XX:-PrintGCDetails -XX:+PrintGCTimeStamps "

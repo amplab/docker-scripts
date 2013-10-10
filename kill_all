@@ -1,5 +1,30 @@
 #!/bin/bash
 
-echo "killing all running docker containers in one second"
+function kill_containers() {
+    containers=($1)
+    for i in "${containers[@]}"; do
+        echo "killing container $i"
+        sudo docker kill "$i"
+    done
+}
+
+if [ "$#" -ne "1" ]; then
+    echo -e "usage:\n   $0 spark\n   $0 shark\n   $0 mesos\n   $0 nameserver"
+    exit 1;
+fi
+
+clustertype=$1
+
+sudo echo "killing containers of $1" # sudo in order to avoid subshells to fail
 sleep 1
-sudo docker kill `sudo docker ps -q`
+
+if [[ "$clustertype" == "nameserver" ]]; then
+    nameserver=$(sudo docker ps | grep dnsmasq_files | awk '{print $1}' | tr '\n' ' ')
+    kill_containers "$nameserver"
+else
+    master=$(sudo docker ps | grep ${clustertype}_master | awk '{print $1}' | tr '\n' ' ')
+    workers=$(sudo docker ps | grep ${clustertype}_worker | awk '{print $1}' | tr '\n' ' ')
+    kill_containers "$master"
+    kill_containers "$workers"
+fi
+

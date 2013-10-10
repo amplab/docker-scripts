@@ -10,7 +10,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt
 RUN apt-get update
 
 # install a few other useful packages plus Open Jdk 7
-RUN apt-get install -y less openjdk-7-jre-headless net-tools vim-tiny sudo openssh-server
+RUN apt-get install -y less openjdk-7-jre-headless net-tools vim-tiny sudo openssh-server iputils-ping
 
 # Install Hadoop
 ADD http://mirror.sdunix.com/apache/hadoop/common/hadoop-1.2.1/hadoop_1.2.1-1_x86_64.deb /root/

@@ -5,9 +5,6 @@
 FROM spark-base:0.7.3
 MAINTAINER AMPLab amplab@berkeley.edu
 
-# Setup a volume for data
-VOLUME ["/data"]
-
 # note: SPARK_VERSION should be inherited from spark-base
 # but for some reason isn't (?)
 ENV SPARK_VERSION 0.7.3
