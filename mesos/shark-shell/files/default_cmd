@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source /root/mesos_files/configure_mesos.sh
+
+env
+
+echo "preparing Mesos"
+prepare_mesos $1
+
+echo "starting Shark Shell"
+cd /opt/metastore && sudo -u hdfs /opt/shark-$SHARK_VERSION/bin/shark

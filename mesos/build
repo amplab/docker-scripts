@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mesos_dirs=$(ls -d mesos* spark-shell)
+mesos_dirs=$(ls -d mesos* spark-shell shark-shell)
 dir_list=("$mesos_dirs")
 
 # NOTE: the order matters but this is the right one
