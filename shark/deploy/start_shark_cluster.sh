@@ -11,7 +11,7 @@ function start_shark_master() {
     sleep 3
     MASTER_IP=$(sudo docker logs $MASTER 2>&1 | egrep '^MASTER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
     echo "MASTER_IP:                     $MASTER_IP"
-    echo "address=\"/master/$MASTER_IP\"" >> /tmp/dnsdir/0hosts
+    echo "address=\"/master/$MASTER_IP\"" >> $DNSFILE
 }
 
 # starts a number of Shark workers
@@ -23,7 +23,7 @@ function start_shark_workers() {
 	echo "started worker container    $WORKER"
 	sleep 3
 	WORKER_IP=$(sudo docker logs $WORKER 2>&1 | egrep '^WORKER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")
-	echo "address=\"/$hostname/$WORKER_IP\"" >> /tmp/dnsdir/0hosts
+	echo "address=\"/$hostname/$WORKER_IP\"" >> $DNSFILE
     done
 }
 

@@ -6,7 +6,6 @@ SPARK_VERSION=0.7.3
 # set this value to the number of workers you want
 NUM_WORKERS=2
 
-
 if [[ "$USER" != "root" ]]; then
    echo "please run as: sudo $0"
    exit 1
