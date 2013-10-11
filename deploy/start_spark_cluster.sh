@@ -28,8 +28,8 @@ function start_spark_workers() {
 }
 
 # prints out information on the cluster
-function print_cluster_info() {
-    BASEDIR=$(cd $(dirname $0); pwd)"/../.."
+function print_spark_cluster_info() {
+    BASEDIR=$(cd $(dirname $0); pwd)"/.."
     echo ""
     echo "***********************************************************************"
     echo "connect to spark via:       sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP"

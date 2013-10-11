@@ -28,8 +28,8 @@ function start_shark_workers() {
 }
 
 # prints out information on the cluster
-function print_cluster_info() {
-    BASEDIR=$(cd $(dirname $0); pwd)"/../.."
+function print_shark_cluster_info() {
+    BASEDIR=$(cd $(dirname $0); pwd)"/.."
     echo ""
     echo "***********************************************************************"
     echo "connect to shark via:       sudo docker run -i -t -dns $NAMESERVER_IP shark-shell:$SHARK_VERSION $MASTER_IP"

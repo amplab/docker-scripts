@@ -5,8 +5,8 @@ dir_list=( "dnsmasq-precise" "apache-hadoop-hdfs-precise" "spark" "shark" "spark
 # NOTE: the order matters but this is the right one
 for i in ${dir_list[@]}; do
 	echo building $i;
-	cd $i;
+	cd ../$i;
 	cat build;
 	./build;
-	cd ..;
+	cd ../build;
 done
