@@ -1,6 +1,6 @@
 # Shark master
-FROM shark-base:0.7.0
-MAINTAINER AMPLab amplab@berkeley.edu
+FROM amplab/shark-base:0.7.0
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # Add run script
 ADD files /root/shark_shell_files

@@ -1,1 +1,1 @@
-sudo docker build -t mesos-base:0.13.0 .
+sudo docker build -t amplab/mesos-base:0.13.0 .

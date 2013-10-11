@@ -1,1 +1,1 @@
-sudo docker build -t shark-shell-mesos:0.7.0 .
+sudo docker build -t amplab/shark-shell-mesos:0.7.0 .

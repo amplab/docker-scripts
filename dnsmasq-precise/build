@@ -1,1 +1,1 @@
-sudo docker build -t dnsmasq-precise .
+sudo docker build -t amplab/dnsmasq-precise .

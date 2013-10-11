@@ -2,8 +2,8 @@
 # Version 0.7.0
 #
 # Use spark-base as base
-FROM spark-base:0.7.3
-MAINTAINER AMPLab amplab@berkeley.edu
+FROM amplab/spark-base:0.7.3
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # note: SPARK_VERSION should be inherited from spark-base
 # but for some reason isn't (?)
