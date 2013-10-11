@@ -7,14 +7,20 @@ source /root/shark_files/configure_shark.sh
 
 IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
 echo "MASTER_IP=$IP"
+
+echo "preparing Shark"
 prepare_shark $IP
+
+echo "starting Hadoop namenode"
 sudo -u hdfs hadoop namenode -format
 service hadoop-namenode start
+
+echo "starting sshd"
 /usr/sbin/sshd
+
 sleep 5
+
+echo "starting Shark master"
 cp /root/shark_master_files/run_shark_master.sh /
 chmod a+rx /run_shark_master.sh
-#nohup sudo -u hdfs /run_shark_master.sh $IP &
 sudo -u hdfs /run_shark_master.sh $IP
-#sleep 20
-#cd /opt/metastore && sudo -u hdfs /opt/shark-$SHARK_VERSION/bin/shark
