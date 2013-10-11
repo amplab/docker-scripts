@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BASEDIR=$(cd $(dirname $0); pwd)
+
 spark_images=( "spark:0.7.3" "spark:0.8.0" )
 shark_images=( "shark:0.7.0" )
 
@@ -8,10 +10,11 @@ VOLUME_MAP=""
 
 image_type="?"
 image_version="?"
+NUM_WORKERS=2
 
-source start_nameserver.sh
-source start_shark_cluster.sh
-source start_spark_cluster.sh
+source $BASEDIR/start_nameserver.sh
+source $BASEDIR/start_shark_cluster.sh
+source $BASEDIR/start_spark_cluster.sh
 
 function check_root() {
     if [[ "$USER" != "root" ]]; then
@@ -21,7 +24,7 @@ function check_root() {
 }
 
 function print_help() {
-    echo "usage: $0 -i <image> [-v <data_directory>] [-c]"
+    echo "usage: $0 -i <image> [-w <#workers>] [-v <data_directory>] [-c]"
     echo ""
     echo "  image:    spark or shark image from:"
     echo -n "               "
@@ -37,7 +40,7 @@ function print_help() {
 }
 
 function parse_options() {
-    while getopts "i:cv:h" opt; do
+    while getopts "i:w:cv:h" opt; do
         case $opt in
         i)
             image_name=$OPTARG
@@ -50,6 +53,9 @@ function parse_options() {
                 image_type="shark"
             fi
             image_version=$(echo "$image_name" | awk -F ":" '{print $2}')
+          ;;
+        w)
+            NUM_WORKERS=$OPTARG
           ;;
         h)
             print_help
@@ -95,7 +101,7 @@ if [ "$image_type" == "spark" ]; then
     sleep 3
     print_spark_cluster_info
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t -dns $NAMESERVER_IP spark-shell:$SPARK_VERSION $MASTER_IP
+        sudo docker run -i -t -dns $NAMESERVER_IP amplab/spark-shell:$SPARK_VERSION $MASTER_IP
     fi
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION=0.7.0
@@ -108,7 +114,7 @@ elif [ "$image_type" == "shark" ]; then
     sleep 3
     print_shark_cluster_info
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t shark-shell:$SHARK_VERSION $MASTER_IP
+        sudo docker run -i -t amplab/shark-shell:$SHARK_VERSION $MASTER_IP
     fi
 else
     echo "not starting anything"
