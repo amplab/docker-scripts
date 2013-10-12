@@ -1,1 +1,1 @@
-sudo docker build -t shark-base:0.7.0 .
+sudo docker build -t amplab/shark-base:0.7.0 .

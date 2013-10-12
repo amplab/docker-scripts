@@ -1,7 +1,7 @@
 # Base Ubuntu Precise 12.04 LTS image
 #
-FROM shark-base:0.7.0
-MAINTAINER AMPLab amplab@berkeley.edu
+FROM amplab/shark-base:0.7.0
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 #RUN apt-get install -y libcurl4-openssl-dev
 RUN apt-get install -y libcurl3

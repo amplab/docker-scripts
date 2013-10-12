@@ -1,1 +1,1 @@
-sudo docker build -t mesos-worker:0.13.0 .
+sudo docker build -t amplab/mesos-worker:0.13.0 .

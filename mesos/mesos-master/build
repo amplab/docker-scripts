@@ -1,1 +1,1 @@
-sudo docker build -t mesos-master:0.13.0 .
+sudo docker build -t amplab/mesos-master:0.13.0 .

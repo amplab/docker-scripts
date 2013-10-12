@@ -1,9 +1,9 @@
-# Spark 0.7.3
-# Version 0.7.3
+# Hadoop 1.2.1
+# Version 1.2.1
 #
-FROM apache-hadoop-hdfs-precise:1.2.1
+FROM amplab/apache-hadoop-hdfs-precise:1.2.1
 
-MAINTAINER AMPLab amplab@berkeley.edu
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 ENV SCALA_VERSION 2.9.3
 ENV SPARK_VERSION 0.7.3

@@ -1,7 +1,7 @@
 # Base Ubuntu Precise 12.04 LTS image
 #
 FROM ubuntu:precise
-MAINTAINER AMPLab amplab@berkeley.edu
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # Setup a volume for data
 VOLUME ["/data"]
@@ -16,9 +16,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y less openjdk-7-jr
 ADD http://mirror.sdunix.com/apache/hadoop/common/hadoop-1.2.1/hadoop_1.2.1-1_x86_64.deb /root/
 RUN dpkg -i /root/hadoop_1.2.1-1_x86_64.deb
 RUN rm /root/hadoop_1.2.1-1_x86_64.deb
-
-#RUN apt-get install -y openjdk-7-jdk
-#RUN apt-get install -y openjdk-7-jre-headless
 
 # add Hadoop config file templates
 # NOTE: we rather do this as a single ADD statement
