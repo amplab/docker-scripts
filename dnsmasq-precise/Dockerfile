@@ -1,6 +1,6 @@
 FROM ubuntu:precise
 
-MAINTAINER AMPLab amplab@berkeley.edu
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 VOLUME [ "/etc/dnsmasq.d" ]
 

@@ -1,6 +1,6 @@
 # Shark worker
-FROM shark-base:0.7.0
-MAINTAINER AMPLab amplab@berkeley.edu
+FROM amplab/shark-base:0.7.0
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # Instead of using a random port, bind the worker to a specific port
 # Note: Here we assume the virtual bridge is used!

@@ -1,1 +1,1 @@
-sudo docker build -t shark-shell:0.7.0 .
+sudo docker build -t amplab/shark-shell:0.7.0 .

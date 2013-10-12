@@ -1,6 +1,6 @@
 # Spark
-FROM mesos-base:0.13.0
-MAINTAINER AMPLab amplab@berkeley.edu
+FROM amplab/mesos-base:0.13.0
+MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 ADD files /root/shark_shell_files
 
