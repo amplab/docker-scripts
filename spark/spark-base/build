@@ -1,1 +1,1 @@
-sudo docker build -t amplab/spark-base:0.7.3 .
+sudo docker build -t ${IMAGE_PREFIX}spark-base:0.7.3 .

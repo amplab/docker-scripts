@@ -1,1 +1,1 @@
-sudo docker build -t amplab/spark-master:0.7.3 .
+sudo docker build -t ${IMAGE_PREFIX}spark-master:0.7.3 .

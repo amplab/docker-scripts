@@ -1,1 +1,1 @@
-sudo docker build -t amplab/apache-hadoop-hdfs-precise:1.2.1 .
+sudo docker build -t ${IMAGE_PREFIX}apache-hadoop-hdfs-precise:1.2.1 .

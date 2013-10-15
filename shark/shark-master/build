@@ -1,1 +1,1 @@
-sudo docker build -t amplab/shark-master:0.7.0 .
+sudo docker build -t ${IMAGE_PREFIX}shark-master:0.7.0 .

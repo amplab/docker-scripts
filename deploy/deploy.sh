@@ -44,11 +44,11 @@ function parse_options() {
         case $opt in
         i)
             image_name=$OPTARG
-            echo "$image_name" | grep "^spark:" > /dev/null;
+            echo "$image_name" | grep "spark:" > /dev/null;
 	    if [ "$?" -eq 0 ]; then
                 image_type="spark"
             fi
-            echo "$image_name" | grep "^shark:" > /dev/null;
+            echo "$image_name" | grep "shark:" > /dev/null;
             if [ "$?" -eq 0 ]; then
                 image_type="shark"
             fi
@@ -95,26 +95,26 @@ if [ "$image_type" == "spark" ]; then
     echo "*** Starting Spark $SPARK_VERSION ***"
     start_nameserver
     sleep 10
-    start_spark_master
+    start_spark_master ${image_name}-master
     sleep 40
-    start_spark_workers
+    start_spark_workers ${image_name}-worker
     sleep 3
     print_spark_cluster_info
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t -dns $NAMESERVER_IP amplab/spark-shell:$SPARK_VERSION $MASTER_IP
+        sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SPARK_VERSION $MASTER_IP
     fi
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION=0.7.0
     echo "*** Starting Shark $SHARK_VERSION + Spark ***"
     start_nameserver
     sleep 10
-    start_shark_master
+    start_shark_master ${image_name}-master
     sleep 40
-    start_shark_workers
+    start_shark_workers ${image_name}-worker
     sleep 3
     print_shark_cluster_info
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t amplab/shark-shell:$SHARK_VERSION $MASTER_IP
+        sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION $MASTER_IP
     fi
 else
     echo "not starting anything"

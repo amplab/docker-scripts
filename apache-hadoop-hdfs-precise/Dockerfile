@@ -14,16 +14,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y less openjdk-7-jr
 
 # Install Hadoop
 ADD http://mirror.sdunix.com/apache/hadoop/common/hadoop-1.2.1/hadoop_1.2.1-1_x86_64.deb /root/
-RUN dpkg -i /root/hadoop_1.2.1-1_x86_64.deb
-RUN rm /root/hadoop_1.2.1-1_x86_64.deb
+RUN dpkg -i /root/hadoop_1.2.1-1_x86_64.deb && rm /root/hadoop_1.2.1-1_x86_64.deb
+
+# Docker messes up /etc/hosts and adds two entries for 127.0.0.1
+# we try to recover from that by giving /etc/resolv.conf and therefore
+# the nameserver priority
+RUN sed -i s/"files dns"/"dns files"/ /etc/nsswitch.conf
 
 # add Hadoop config file templates
-# NOTE: we rather do this as a single ADD statement
-# since we are running into
-#       Error build: Unable to mount using aufs
-#       Unable to mount using aufs
-# issue. For more information see
-#       https://github.com/dotcloud/docker/issues/1171
 ADD files /root/hadoop_files
 
 # Set JAVA_HOME

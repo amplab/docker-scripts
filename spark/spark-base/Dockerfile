@@ -1,7 +1,7 @@
 # Hadoop 1.2.1
 # Version 1.2.1
 #
-FROM amplab/apache-hadoop-hdfs-precise:1.2.1
+FROM apache-hadoop-hdfs-precise:1.2.1
 
 MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
@@ -21,11 +21,5 @@ ADD http://spark-project.org/download/spark-$SPARK_VERSION-prebuilt-hadoop1.tgz 
 RUN (cd / && gunzip < spark-$SPARK_VERSION-prebuilt-hadoop1.tgz)|(cd /opt && tar -xvf -)
 RUN rm /spark-$SPARK_VERSION-prebuilt-hadoop1.tgz
 
-# Add Shark config files and configure script
-# NOTE: we rather do this as a single ADD statement
-# since we are running into
-#       Error build: Unable to mount using aufs
-#       Unable to mount using aufs
-# issue. For more information see
-#       https://github.com/dotcloud/docker/issues/1171
+# Add Spark config files and configure script
 ADD files /root/spark_files

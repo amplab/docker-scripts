@@ -1,5 +1,5 @@
 # Shark master
-FROM amplab/shark-base:0.7.0
+FROM shark-base:0.7.0
 MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # Add run script
