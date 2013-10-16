@@ -2,6 +2,7 @@
 
 NAMESERVER=-1
 NAMESERVER_IP=
+DOMAINNAME=".mycluster.com"
 
 # starts the dnsmasq nameserver
 function start_nameserver() {
@@ -10,7 +11,7 @@ function start_nameserver() {
     mkdir $DNSDIR
 
     echo "starting nameserver container"
-    NAMESERVER=$(sudo docker run -d -h nameserver -v $DNSDIR:/etc/dnsmasq.d amplab/dnsmasq-precise)
+    NAMESERVER=$(sudo docker run -d -h nameserver${DOMAINNAME} -v $DNSDIR:/etc/dnsmasq.d dnsmasq-precise)
     echo "started nameserver container:  $NAMESERVER"
     echo "DNS host->IP file mapped:      $DNSFILE"
     sleep 3

@@ -43,16 +43,16 @@ function parse_options() {
     while getopts "i:w:cv:h" opt; do
         case $opt in
         i)
-            image_name=$OPTARG
-            echo "$image_name" | grep "spark:" > /dev/null;
+            echo "$OPTARG" | grep "spark:" > /dev/null;
 	    if [ "$?" -eq 0 ]; then
                 image_type="spark"
             fi
-            echo "$image_name" | grep "shark:" > /dev/null;
+            echo "$OPTARG" | grep "shark:" > /dev/null;
             if [ "$?" -eq 0 ]; then
                 image_type="shark"
             fi
-            image_version=$(echo "$image_name" | awk -F ":" '{print $2}')
+	    image_name=$(echo "$OPTARG" | awk -F ":" '{print $1}')
+            image_version=$(echo "$OPTARG" | awk -F ":" '{print $2}') 
           ;;
         w)
             NUM_WORKERS=$OPTARG
@@ -99,7 +99,7 @@ if [ "$image_type" == "spark" ]; then
     sleep 40
     start_spark_workers ${image_name}-worker
     sleep 3
-    print_spark_cluster_info
+    print_spark_cluster_info ${image_name}-shell
     if [[ "$start_shell" -eq 1 ]]; then
         sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SPARK_VERSION $MASTER_IP
     fi
@@ -112,7 +112,7 @@ elif [ "$image_type" == "shark" ]; then
     sleep 40
     start_shark_workers ${image_name}-worker
     sleep 3
-    print_shark_cluster_info
+    print_shark_cluster_info ${image_name}-shell
     if [[ "$start_shell" -eq 1 ]]; then
         sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION $MASTER_IP
     fi
