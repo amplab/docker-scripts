@@ -101,7 +101,7 @@ if [ "$image_type" == "spark" ]; then
     sleep 3
     print_spark_cluster_info ${image_name}-shell
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SPARK_VERSION $MASTER_IP
+        sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SPARK_VERSION
     fi
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION=0.7.0
@@ -114,7 +114,7 @@ elif [ "$image_type" == "shark" ]; then
     sleep 3
     print_shark_cluster_info ${image_name}-shell
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION $MASTER_IP
+        sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION
     fi
 else
     echo "not starting anything"
