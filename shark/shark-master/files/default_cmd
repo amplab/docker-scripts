@@ -23,4 +23,5 @@ sleep 5
 echo "starting Shark master"
 cp /root/shark_master_files/run_shark_master.sh /
 chmod a+rx /run_shark_master.sh
-sudo -u hdfs /run_shark_master.sh $IP
+sudo -u hdfs /run_shark_master.sh
+#$IP

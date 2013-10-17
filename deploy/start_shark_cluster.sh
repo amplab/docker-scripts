@@ -32,7 +32,7 @@ function print_shark_cluster_info() {
     BASEDIR=$(cd $(dirname $0); pwd)"/.."
     echo ""
     echo "***********************************************************************"
-    echo "connect to shark via:       sudo docker run -i -t -dns $NAMESERVER_IP $1:$SHARK_VERSION"
+    echo "connect to shark via:       sudo docker run -i -t -dns $NAMESERVER_IP $1:$SHARK_VERSION $MASTER_IP"
     echo ""
     echo "visit Spark WebUI at:       http://$MASTER_IP:8080/"
     echo "visit Hadoop Namenode at:   http://$MASTER_IP:50070"
