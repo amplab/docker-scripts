@@ -1,5 +1,5 @@
 # Spark
-FROM amplab/spark-base:0.8.0
+FROM spark-base:0.8.0
 MAINTAINER amplab amp-docker@eecs.berkeley.edu
 
 # Expose TCP ports 7077 8080

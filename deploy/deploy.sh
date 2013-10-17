@@ -2,8 +2,8 @@
 
 BASEDIR=$(cd $(dirname $0); pwd)
 
-spark_images=( "spark:0.7.3" "spark:0.8.0" )
-shark_images=( "shark:0.7.0" )
+spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" )
+shark_images=( "amplab/shark:0.7.0" )
 
 start_shell=0
 VOLUME_MAP=""
@@ -114,7 +114,7 @@ elif [ "$image_type" == "shark" ]; then
     sleep 3
     print_shark_cluster_info ${image_name}-shell
     if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION
+        sudo docker run -i -t ${image_name}-shell:$SHARK_VERSION $MASTER_IP
     fi
 else
     echo "not starting anything"

@@ -1,1 +1,1 @@
-sudo docker build -t amplab/spark-worker:0.8.0 .
+sudo docker build -t ${IMAGE_PREFIX}spark-worker:0.8.0 .

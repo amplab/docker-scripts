@@ -1,3 +1,3 @@
 #!/bin/bash
 . /opt/spark-0.8.0/conf/spark-env.sh
-/opt/spark-0.8.0/spark-class org.apache.spark.deploy.worker.Worker $1
+${SPARK_HOME}/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077

@@ -19,4 +19,4 @@ sleep 5
 echo "starting Spark Worker"
 cp /root/spark_worker_files/run_spark_worker.sh /
 chmod a+rx /run_spark_worker.sh
-sudo -u hdfs /run_spark_worker.sh $2
+sudo -u hdfs /run_spark_worker.sh
