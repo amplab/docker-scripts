@@ -8,9 +8,9 @@ NUM_REGISTERED_WORKERS=0
 function start_master() {
     echo "starting master container"
     if [ "$DEBUG" -gt 0 ]; then
-        echo sudo docker run -i -t -d -dns $NAMESERVER_IP -h master${DOMAINNAME} $VOLUME_MAP $1:$2
+        echo sudo docker run -d -dns $NAMESERVER_IP -h master${DOMAINNAME} $VOLUME_MAP $1:$2
     fi
-    MASTER=$(sudo docker run -i -t -d -dns $NAMESERVER_IP -h master${DOMAINNAME} $VOLUME_MAP $1:$2)
+    MASTER=$(sudo docker run -d -dns $NAMESERVER_IP -h master${DOMAINNAME} $VOLUME_MAP $1:$2)
     echo "started master container:      $MASTER"
     sleep 3
     MASTER_IP=$(sudo docker logs $MASTER 2>&1 | egrep '^MASTER_IP=' | awk -F= '{print $2}' | tr -d -c "[:digit:] .")

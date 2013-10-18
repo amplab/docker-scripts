@@ -5,6 +5,7 @@ BASEDIR=$(cd $(dirname $0); pwd)
 
 spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" )
 shark_images=( "amplab/shark:0.7.0" )
+NAMESERVER_IMAGE="dnsmasq-precise"
 
 start_shell=0
 VOLUME_MAP=""
@@ -101,7 +102,7 @@ else
     exit 0
 fi
 
-start_nameserver
+start_nameserver $NAMESERVER_IMAGE
 wait_for_nameserver
 start_master ${image_name}-master $image_version
 wait_for_master
