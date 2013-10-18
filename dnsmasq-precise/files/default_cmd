@@ -9,8 +9,8 @@ dnsmasq
 
 while [ 1 ];
 do
-    sleep 10
-    # kill and restart dnsmasq every ten seconds
+    sleep 3
+    # kill and restart dnsmasq every three seconds
     # in case its configuration has changed
     pkill dnsmasq
     dnsmasq
