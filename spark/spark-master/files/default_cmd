@@ -17,6 +17,7 @@ service hadoop-namenode start
 echo "starting sshd"
 /usr/sbin/sshd
 
+# note: it seems important to sleep here
 sleep 5
 
 echo "starting Spark Master"

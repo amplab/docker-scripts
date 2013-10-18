@@ -3,5 +3,6 @@
 
 while [ 1 ];
 do
-    sleep 10
+	tail -f /opt/spark-${SPARK_VERSION}/logs/*.out
+        sleep 1
 done

@@ -33,6 +33,7 @@ function configure_shark() {
     sed -i s/__HIVE_HOME__/"\/opt\/hive-${HIVE_VERSION}-bin"/ /opt/shark-$SHARK_VERSION/conf/shark-env.sh
     # Hive
     sed -i s/__MASTER__/$1/ /opt/hive-0.9.0-bin/conf/hive-site.xml
+    #sed -i s/__MASTER__/master/ /opt/hive-0.9.0-bin/conf/hive-site.xml
 }
 
 function prepare_shark() {
