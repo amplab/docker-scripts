@@ -17,22 +17,37 @@ echo "starting tests at $START" > tests.log
 RESULT=0
 FAILED=0
 
+check_screen_session_alive() {
+    screen -q -ls > /dev/null
+    if (( $? < 10 )); then
+        SCREEN_ALIVE=1
+    fi 
+}
+
 function wait_for_prompt() {
     service=$1
     OUTFILE=$2
+    SCREEN_ALIVE=0
+    
     if [[ "$service" == "spark" ]]; then
-        tail -n 6 $OUTFILE | grep "^scala> " > /dev/null
-        until [[ "$?" == "0" ]]; do
-            sleep 1
-            tail -n 6 $OUTFILE | grep "^scala> " > /dev/null
-        done
+        query_string="scala>\s$"
     else
-        tail -n 6 $OUTFILE | grep "^shark> " > /dev/null
-        until [[ "$?" == "0" ]]; do
-            sleep 1
-            tail -n 6 $OUTFILE | grep "^shark> " > /dev/null
-        done
+        query_string="^shark>\s$\|\s\s\s\s\s>\s$"
     fi
+    
+    tail -n 1 $OUTFILE | tr -d $'\r' | grep "$query_string" > /dev/null
+    STOP="$?"
+    until [[ "$STOP" == "0" ]]; do
+        sleep 1
+        check_screen_session_alive
+        if [[ "$SCREEN_ALIVE" == "0" ]]; then
+            sudo screen -S tmpshell -p 0 -X stuff $'\n'
+            tail -n 1 $OUTFILE | tr -d $'\r' | grep "$query_string" > /dev/null
+            STOP="$?"
+        else
+            break
+        fi
+    done
 }
 
 function check_result() {
@@ -43,7 +58,7 @@ function check_result() {
         grep "Array(this is a test, more test, one more line)" $outfile > /dev/null
         RESULT="$?"
     elif [[ "$service" == "shark" ]]; then
-        grep "^500" $outfile > /dev/null
+        cat $outfile | tr -d $'\r' | grep "^500$" > /dev/null
         RESULT="$?"
     fi
 }
@@ -82,11 +97,6 @@ EOF
     sudo screen -S tmpshell -p 0 -X stuff $'\n'
 
     sleep 10
-    # shark prints the prompt even though it's not idle
-    # so let's sleep a little longer
-    if [[ "$service" == "shark" ]]; then
-        sleep 15
-    fi
     wait_for_prompt $service $OUTFILE
 
     $BASEDIR/deploy/kill_all.sh $service 1>> $LOGFILE 2>&1

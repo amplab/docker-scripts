@@ -67,7 +67,7 @@ function wait_for_master {
     if [[ "$SPARK_VERSION" == "0.7.3" ]] || [[ "$image_type" == "shark" ]]; then
         query_string="INFO HttpServer: akka://sparkMaster/user/HttpServer started"
     else
-        query_string="ui.MasterWebUI: Started Master web UI"
+        query_string="MasterWebUI: Started Master web UI"
     fi
     echo -n "waiting for master "
     sudo docker logs $MASTER | grep "$query_string" > /dev/null
