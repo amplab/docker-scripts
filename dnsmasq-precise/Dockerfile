@@ -9,6 +9,7 @@ RUN apt-get install -y dnsmasq-base
 RUN echo "listen-address=__LOCAL_IP__" > /etc/dnsmasq.conf
 RUN echo "resolv-file=/etc/resolv.dnsmasq.conf" >> /etc/dnsmasq.conf
 RUN echo "conf-dir=/etc/dnsmasq.d"  >> /etc/dnsmasq.conf
+RUN echo "domain=cluster.com"  >> /etc/dnsmasq.conf
 
 RUN echo "nameserver 8.8.8.8" >> /etc/resolv.dnsmasq.conf
 

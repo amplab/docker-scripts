@@ -1,9 +1,11 @@
 #!/bin/bash
 
+DEBUG=0
 BASEDIR=$(cd $(dirname $0); pwd)
 
-spark_images=( "spark:0.7.3" "spark:0.8.0" )
-shark_images=( "shark:0.7.0" )
+spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" )
+shark_images=( "amplab/shark:0.7.0" "amplab/shark:0.8.0" )
+NAMESERVER_IMAGE="dnsmasq-precise"
 
 start_shell=0
 VOLUME_MAP=""
@@ -13,7 +15,6 @@ image_version="?"
 NUM_WORKERS=2
 
 source $BASEDIR/start_nameserver.sh
-source $BASEDIR/start_shark_cluster.sh
 source $BASEDIR/start_spark_cluster.sh
 
 function check_root() {
@@ -43,16 +44,16 @@ function parse_options() {
     while getopts "i:w:cv:h" opt; do
         case $opt in
         i)
-            image_name=$OPTARG
-            echo "$image_name" | grep "^spark:" > /dev/null;
+            echo "$OPTARG" | grep "spark:" > /dev/null;
 	    if [ "$?" -eq 0 ]; then
                 image_type="spark"
             fi
-            echo "$image_name" | grep "^shark:" > /dev/null;
+            echo "$OPTARG" | grep "shark:" > /dev/null;
             if [ "$?" -eq 0 ]; then
                 image_type="shark"
             fi
-            image_version=$(echo "$image_name" | awk -F ":" '{print $2}')
+	    image_name=$(echo "$OPTARG" | awk -F ":" '{print $1}')
+            image_version=$(echo "$OPTARG" | awk -F ":" '{print $2}') 
           ;;
         w)
             NUM_WORKERS=$OPTARG
@@ -93,30 +94,39 @@ parse_options $@
 if [ "$image_type" == "spark" ]; then
     SPARK_VERSION="$image_version"
     echo "*** Starting Spark $SPARK_VERSION ***"
-    start_nameserver
-    sleep 10
-    start_spark_master
-    sleep 40
-    start_spark_workers
-    sleep 3
-    print_spark_cluster_info
-    if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t -dns $NAMESERVER_IP amplab/spark-shell:$SPARK_VERSION $MASTER_IP
-    fi
 elif [ "$image_type" == "shark" ]; then
-    SHARK_VERSION=0.7.0
-    echo "*** Starting Shark $SHARK_VERSION + Spark ***"
-    start_nameserver
-    sleep 10
-    start_shark_master
-    sleep 40
-    start_shark_workers
-    sleep 3
-    print_shark_cluster_info
-    if [[ "$start_shell" -eq 1 ]]; then
-        sudo docker run -i -t amplab/shark-shell:$SHARK_VERSION $MASTER_IP
+    SHARK_VERSION="$image_version"
+    if [ "$SHARK_VERSION" == "0.8.0" ]; then
+        SPARK_VERSION="0.8.0"
+    else
+        SPARK_VERSION="0.7.3"
     fi
+    echo "*** Starting Shark $SHARK_VERSION + Spark ***"
 else
     echo "not starting anything"
+    exit 0
 fi
 
+start_nameserver $NAMESERVER_IMAGE
+wait_for_nameserver
+start_master ${image_name}-master $image_version
+wait_for_master
+if [ "$image_type" == "spark" ]; then
+    SHELLCOMMAND="sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SPARK_VERSION"
+elif [ "$image_type" == "shark" ]; then
+    SHELLCOMMAND="sudo docker run -i -t -dns $NAMESERVER_IP ${image_name}-shell:$SHARK_VERSION $MASTER_IP"
+fi
+
+start_workers ${image_name}-worker $image_version
+get_num_registered_workers
+echo -n "waiting for workers to register "
+until [[  "$NUM_REGISTERED_WORKERS" == "$NUM_WORKERS" ]]; do
+    echo -n "."
+    sleep 1
+    get_num_registered_workers
+done
+echo ""
+print_cluster_info "$SHELLCOMMAND"
+if [[ "$start_shell" -eq 1 ]]; then
+    $SHELLCOMMAND
+fi

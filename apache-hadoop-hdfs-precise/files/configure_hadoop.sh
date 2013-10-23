@@ -24,10 +24,6 @@ function deploy_hadoop_files() {
 function configure_hadoop() {
     sed -i s/__MASTER__/$1/ /etc/hadoop/core-site.xml
     sed -i s/"JAVA_HOME=\/usr\/lib\/jvm\/java-6-sun"/"JAVA_HOME=\/usr\/lib\/jvm\/java-7-openjdk-amd64"/ /etc/hadoop/hadoop-env.sh
-    # Docker messes up /etc/hosts and adds two entries for 127.0.0.1
-    # we try to recover from that by giving /etc/resolv.conf and therefore
-    # the nameserver priority
-    sed -i s/"files dns"/"dns files"/ /etc/nsswitch.conf
 }
 
 function prepare_hadoop() {

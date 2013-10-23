@@ -7,7 +7,7 @@ development.
 
 ## Requirements
 
-Tested on Ubuntu 12.04 Docker version 0.6.3 with the virtual
+Tested on Ubuntu 12.04 Docker version 0.6.4 with the virtual
 switch
 	lxcbr0
 enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker.io).
@@ -20,7 +20,7 @@ First clone the repository:
 
 All Spark and Shark images can be built in the correct order by
 
-	$ ./docker/build/build.sh
+	$ ./docker/build/build_all.sh
 
 The script builds the images in an order that satisfies the chain of
 dependencies:

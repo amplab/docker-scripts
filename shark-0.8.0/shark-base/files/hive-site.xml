@@ -1,0 +1,43 @@
+<configuration>
+<property>
+<name>fs.default.name</name>
+<value>hdfs://__MASTER__:9000/</value>
+</property>
+<property>  
+<name>fs.defaultFS</name>
+<value>hdfs://__MASTER__:9000/</value>
+</property>
+<property>
+<name>mapred.job.tracker</name>
+<value>NONE</value>
+</property>
+<property>
+  <name>hive.exec.scratchdir</name>
+  <value>/tmp/hive-scratch</value>
+  <description>Scratch space for Hive jobs</description>
+</property>
+<property>
+  <name>hive.metastore.local</name>
+  <value>true</value>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <value>org.apache.derby.jdbc.EmbeddedDriver</value>
+</property>
+<property>
+  <name>hive.metastore.metadb.dir</name>
+  <value>file:///opt/metastore/metadb/</value>
+</property>
+<property>
+  <name>hive.metastore.uris</name>
+  <value>file:///opt/metastore/metadb/</value>
+</property>
+<property>
+  <name>hive.metastore.warehouse.dir</name>
+  <value>hdfs://__MASTER__:9000/user/hdfs/warehouse</value>
+</property>
+</configuration>

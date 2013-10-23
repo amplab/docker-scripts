@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# run this as:
+#   sudo docker run -i -t -d shark-master:$SHARK_VERSION
+
+source /root/shark_files/configure_shark.sh
+
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "MASTER_IP=$IP"
+
+echo "preparing Shark"
+prepare_shark $IP
+
+echo "starting Hadoop namenode"
+sudo -u hdfs hadoop namenode -format > /dev/null 2>&1
+service hadoop-namenode start > /dev/null 2>&1
+
+echo "starting sshd"
+/usr/sbin/sshd
+
+sleep 5
+
+echo "starting Shark master"
+cp /root/shark_master_files/run_shark_master.sh /
+chmod a+rx /run_shark_master.sh
+sudo -u hdfs /run_shark_master.sh
+#$IP

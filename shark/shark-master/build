@@ -1,1 +1,0 @@
-sudo docker build -t amplab/shark-master:0.7.0 .
