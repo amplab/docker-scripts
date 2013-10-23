@@ -12,50 +12,37 @@ switch
 	lxcbr0
 enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker.io).
 
-## Building
+## Testing
 
 First clone the repository:
 
 	$ git clone https://github.com/amplab/docker.git
 
-All Spark and Shark images can be built in the correct order by
-
-	$ ./docker/build/build_all.sh
-
-The script builds the images in an order that satisfies the chain of
-dependencies:
-
-apache-hadoop-hdfs-precise -> spark-base -> spark-{master, worker, shell}
-
-apache-hadoop-hdfs-precise -> spark-base -> shark-base -> shark-{master, worker, shell}
-
-You can always (re-)build single images by cd-ing into the image directory and doing
-
-	$ . build
-
-## Testing
-
-The deploy script takes the following options.
+This repository contains deploy scripts and the sources for the Docker
+image files, which can be easily modified. The main deploy script
+takes the following options.
 
 <pre>
-$ sudo ./deploy.sh
+$ sudo ./deploy/deploy.sh
 usage: ./deploy.sh -i &lt;image&gt; [-w &lt;&#35;workers&gt;] [-v &lt;data_directory&gt;] [-c]
 
   image:    spark or shark image from:
-                 spark:0.7.3  spark:0.8.0
-                 shark:0.7.0
+                 amplab/spark:0.7.3  amplab/spark:0.8.0
+                 amplab/shark:0.7.0  amplab/shark:0.8.0
 </pre>
 
-The script either starts a standalone Spark cluster or
-a standalone Spark/Shark cluster for a given number of worker nodes.
-In addition to Spark (and Shark) the cluster also runs a Hadoop
-HDFS filesystem. When the deploy
-script is run it generates one container for the master node,
-one container for each worker node and one extra container running
-a Dnsmasq DNS forwarder. The latter one can also be used to resolve
-node names on the host, for example to access the worker logs via
-the Spark web UI. Each node also runs a sshd which is pre-configured
-with the given ssh RSA keys.
+The script either starts a standalone Spark cluster or a standalone
+Spark/Shark cluster for a given number of worker nodes. Note that
+on the first call it may take a while for Docker to download the
+various image images from the repository,
+
+In addition to Spark (and Shark) the cluster also runs a Hadoop HDFS
+filesystem. When the deploy script is run it generates one container
+for the master node, one container for each worker node and one extra
+container running a Dnsmasq DNS forwarder. The latter one can also be
+used to resolve node names on the host, for example to access the
+worker logs via the Spark web UI. Each node also runs a sshd which is
+pre-configured with the given ssh RSA keys.
 
 Optionally one can set the number of workers (default: 2) and a data directory
 which is a local path on the host that can be mounted on the master and
@@ -80,44 +67,47 @@ Wait for the "cluster" to come up. Note: after the cluster is up you should see 
 <pre>
 *** Starting Spark 0.8.0 ***
 starting nameserver container
-started nameserver container:  69f7d05b95cc
-DNS host->IP file mapped:      /tmp/dnsdir_5817/0hosts
-NAMESERVER_IP:                 10.0.3.89
-starting Spark master container
-started master container:      b470f9921983
-MASTER_IP:                     10.0.3.90
-starting Spark worker container
-started worker container:  ce8b106d8cbd
-starting Spark worker container
-started worker container:  8c49e59691e1
-starting Spark worker container
-started worker container:  6a92c4a8c819
+started nameserver container:  72633d3612ea
+DNS host->IP file mapped:      /tmp/dnsdir_10440/0hosts
+NAMESERVER_IP:                 172.17.0.90
+waiting for nameserver to come up 
+starting master container
+started master container:      7498d87db939
+MASTER_IP:                     172.17.0.91
+waiting for master ..................
+waiting for nameserver to find master 
+starting worker container
+started worker container:  db977053c6b2
+starting worker container
+started worker container:  66a75c55752a
+starting worker container
+started worker container:  053988c65196
+waiting for workers to register .....
 
 ***********************************************************************
-connect to spark via:       sudo docker run -i -t -dns 10.0.3.89 amplab/spark-shell:0.8.0 10.0.3.90
+connect to via:             sudo docker run -i -t -dns 172.17.0.90 spark-shell:0.8.0
 
-visit Spark WebUI at:       http://10.0.3.90:8080/
-visit Hadoop Namenode at:   http://10.0.3.90:50070
-ssh into master via:        ssh -i /home/andre/docker/deploy/../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@10.0.3.90
+visit Spark WebUI at:       http://172.17.0.91:8080/
+visit Hadoop Namenode at:   http://172.17.0.91:50070
+ssh into master via:        ssh -i /home/andre/docker/deploy/../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@172.17.0.91
 
 /data mapped:               
 
-kill cluster via:           sudo docker kill b470f9921983
+kill cluster via:           sudo docker kill 7498d87db939
 ***********************************************************************
 
 to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:
-nameserver 10.0.3.89
+nameserver 172.17.0.90
 </pre>
 
 #### Start the Spark shell container as shown above, for example:
 
-	$ sudo docker run -i -t -dns 10.0.3.89 amplab/spark-shell:0.8.0 10.0.3.90
+	$ sudo docker run -i -t -dns 172.17.0.90 spark-shell:0.8.0
 
 #### Execute an example:
 
 <pre>
-scala&gt; val hdfs_prefix = System.getenv("HDFS_PREFIX")
-scala&gt; val textFile = sc.textFile(hdfs_prefix+"/user/hdfs/test.txt")
+scala&gt; val textFile = sc.textFile("hdfs://master:9000/user/hdfs/test.txt")
 scala&gt; textFile.count()
 scala&gt; textFile.map({line => line}).collect()
 </pre>
@@ -135,48 +125,51 @@ Basically the same steps apply only that the Shark images are chosen instead of 
 
 #### Deploy the cluster
 
-	$ sudo ./deploy/deploy.sh -i shark:0.7.0 -w 3 
+	$ sudo ./deploy/deploy.sh -i shark:0.8.0 -w 3
 
 #### Wait a few seconds
 
 Wait for the "cluster" to come up. Note: after the cluster is up you should see something like this:
 
 <pre>
-> sudo ./deploy/deploy.sh -i shark:0.7.0 -w 3
-*** Starting Shark 0.7.0 + Spark ***
+*** Starting Shark 0.8.0 + Spark ***
 starting nameserver container
-started nameserver container:  23bb51a4b50b
-DNS host->IP file mapped:      /tmp/dnsdir_30445/0hosts
-NAMESERVER_IP:                 10.0.3.95
-starting Shark master container
-started master container:      37063f7574ae
-MASTER_IP:                     10.0.3.96
-starting Shark worker container
-started worker container    ec91fbc84cef
-starting Shark worker container
-started worker container    71d111587219
-starting Shark worker container
-started worker container    e37a52c5ad48
+started nameserver container:  3afa9bb9f2cb
+DNS host->IP file mapped:      /tmp/dnsdir_3620/0hosts
+NAMESERVER_IP:                 172.17.0.84
+waiting for nameserver to come up 
+starting master container
+started master container:      5e91d29ae61c
+MASTER_IP:                     172.17.0.85
+waiting for master .............
+waiting for nameserver to find master 
+starting worker container
+started worker container:  b958be515616
+starting worker container
+started worker container:  df34ae552bca
+starting worker container
+started worker container:  33446470b323
+waiting for workers to register ........
 
 ***********************************************************************
-connect to shark via:       sudo docker run -i -t -dns 10.0.3.95 amplab/shark-shell:0.7.0 10.0.3.96
+connect to via:             sudo docker run -i -t -dns 172.17.0.84 shark-shell:0.8.0 172.17.0.85
 
-visit Spark WebUI at:       http://10.0.3.96:8080/
-visit Hadoop Namenode at:   http://10.0.3.96:50070
-ssh into master via:        ssh -i /home/andre/docker/deploy/../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@10.0.3.96
+visit Spark WebUI at:       http://172.17.0.85:8080/
+visit Hadoop Namenode at:   http://172.17.0.85:50070
+ssh into master via:        ssh -i /home/andre/docker/deploy/../apache-hadoop-hdfs-precise/files/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@172.17.0.85
 
 /data mapped:               
 
-kill cluster via:           sudo docker kill 37063f7574ae
+kill cluster via:           sudo docker kill 5e91d29ae61c
 ***********************************************************************
 
 to enable cluster name resolution add the following line to _the top_ of your host's /etc/resolv.conf:
-nameserver 10.0.3.95
+nameserver 172.17.0.84  
 </pre>
 
 #### Start the Shark shell container as shown above, for example:
 
-	$ sudo docker run -i -t -dns 10.0.3.95 amplab/shark-shell:0.7.0 10.0.3.96
+	$ sudo docker run -i -t -dns 172.17.0.84 shark-shell:0.8.0 172.17.0.85
 
 #### Execute an example:
 
@@ -190,6 +183,26 @@ shark> SELECT COUNT(1) FROM src;
 
 	$ sudo ./deploy/kill_all.sh shark
 	$ sudo ./deploy/kill_all.sh nameserver
+
+
+## Building
+
+If you prefer to build the images yourself (or intend to modify them) rather
+than downloading them from the Docker repository, you can build
+all Spark and Shark images in the correct order via the build script:
+
+	$ ./build/build_all.sh
+
+The script builds the images in an order that satisfies the chain of
+dependencies:
+
+apache-hadoop-hdfs-precise -> spark-base -> spark-{master, worker, shell}
+
+apache-hadoop-hdfs-precise -> spark-base -> shark-base -> shark-{master, worker, shell}
+
+You can always (re-)build single images by cd-ing into the image directory and doing
+
+	$ . build
 
 ## Best practices for Dockerfiles and startup scripts
 
