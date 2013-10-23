@@ -55,7 +55,7 @@ function print_cluster_info() {
 }
 
 function get_num_registered_workers() {
-    if [[ "$SPARK_VERSION" == "0.7.3" ]]  || [[ "$image_type" == "shark" ]]; then 
+    if [[ "$SPARK_VERSION" == "0.7.3" ]]; then 
         DATA=$( curl -s http://$MASTER_IP:8080/?format=json | tr -d '\n' | sed s/\"/\\\\\"/g)
     else
         DATA=$( wget -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
@@ -64,7 +64,7 @@ function get_num_registered_workers() {
 }
 
 function wait_for_master {
-    if [[ "$SPARK_VERSION" == "0.7.3" ]] || [[ "$image_type" == "shark" ]]; then
+    if [[ "$SPARK_VERSION" == "0.7.3" ]]; then
         query_string="INFO HttpServer: akka://sparkMaster/user/HttpServer started"
     else
         query_string="MasterWebUI: Started Master web UI"
