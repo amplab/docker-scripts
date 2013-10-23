@@ -58,7 +58,7 @@ Starting from the directory in which the repository was cloned do
 
 #### Deploy the cluster
 
-	$ sudo ./deploy/deploy.sh -i spark:0.8.0 -w 3 
+	$ sudo ./deploy/deploy.sh -i amplab/spark:0.8.0 -w 3 
 
 #### Wait a few seconds
 
@@ -85,7 +85,7 @@ started worker container:  053988c65196
 waiting for workers to register .....
 
 ***********************************************************************
-connect to via:             sudo docker run -i -t -dns 172.17.0.90 spark-shell:0.8.0
+connect to via:             sudo docker run -i -t -dns 172.17.0.90 amplab/spark-shell:0.8.0
 
 visit Spark WebUI at:       http://172.17.0.91:8080/
 visit Hadoop Namenode at:   http://172.17.0.91:50070
@@ -102,7 +102,7 @@ nameserver 172.17.0.90
 
 #### Start the Spark shell container as shown above, for example:
 
-	$ sudo docker run -i -t -dns 172.17.0.90 spark-shell:0.8.0
+	$ sudo docker run -i -t -dns 172.17.0.90 amplab/spark-shell:0.8.0
 
 #### Execute an example:
 
@@ -125,7 +125,7 @@ Basically the same steps apply only that the Shark images are chosen instead of 
 
 #### Deploy the cluster
 
-	$ sudo ./deploy/deploy.sh -i shark:0.8.0 -w 3
+	$ sudo ./deploy/deploy.sh -i amplab/shark:0.8.0 -w 3
 
 #### Wait a few seconds
 
@@ -152,7 +152,7 @@ started worker container:  33446470b323
 waiting for workers to register ........
 
 ***********************************************************************
-connect to via:             sudo docker run -i -t -dns 172.17.0.84 shark-shell:0.8.0 172.17.0.85
+connect to via:             sudo docker run -i -t -dns 172.17.0.84 amplab/shark-shell:0.8.0 172.17.0.85
 
 visit Spark WebUI at:       http://172.17.0.85:8080/
 visit Hadoop Namenode at:   http://172.17.0.85:50070
@@ -169,7 +169,7 @@ nameserver 172.17.0.84
 
 #### Start the Shark shell container as shown above, for example:
 
-	$ sudo docker run -i -t -dns 172.17.0.84 shark-shell:0.8.0 172.17.0.85
+	$ sudo docker run -i -t -dns 172.17.0.84 amplab/shark-shell:0.8.0 172.17.0.85
 
 #### Execute an example:
 
