@@ -56,7 +56,7 @@ function print_cluster_info() {
 
 function get_num_registered_workers() {
     if [[ "$SPARK_VERSION" == "0.7.3" ]]; then 
-        DATA=$( curl -s http://$MASTER_IP:8080/?format=json | tr -d '\n' | sed s/\"/\\\\\"/g)
+        DATA=$( curl --noproxy -s http://$MASTER_IP:8080/?format=json | tr -d '\n' | sed s/\"/\\\\\"/g)
     else
         DATA=$( wget --no-proxy -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
     fi
