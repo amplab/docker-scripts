@@ -98,6 +98,13 @@ EOF
 
     sleep 10
     wait_for_prompt $service $OUTFILE
+    # the shell session should be in shoutdown already since we
+    # always include an exit command; however, because of timing
+    # issues it may take a while and conflict with the following
+    # test. So let's wait one second and then kill the screen
+    # session from the outside
+    sleep 1
+    sudo screen -S tmpshell -p 0 -X quit > /dev/null 2>&1
 
     $BASEDIR/deploy/kill_all.sh $service 1>> $LOGFILE 2>&1
     $BASEDIR/deploy/kill_all.sh nameserver 1>> $LOGFILE 2>&1

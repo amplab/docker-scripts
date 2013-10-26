@@ -58,7 +58,7 @@ function get_num_registered_workers() {
     if [[ "$SPARK_VERSION" == "0.7.3" ]]; then 
         DATA=$( curl -s http://$MASTER_IP:8080/?format=json | tr -d '\n' | sed s/\"/\\\\\"/g)
     else
-        DATA=$( wget -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
+        DATA=$( wget --no-proxy -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
     fi
     NUM_REGISTERED_WORKERS=$(python -c "import json; data = \"$DATA\"; value = json.loads(data); print len(value['workers'])")
 }

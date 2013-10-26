@@ -16,7 +16,7 @@ enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker
 
 First clone the repository:
 
-	$ git clone https://github.com/amplab/docker.git
+	$ git clone https://github.com/amplab/docker-scripts.git
 
 This repository contains deploy scripts and the sources for the Docker
 image files, which can be easily modified. The main deploy script
@@ -34,7 +34,7 @@ usage: ./deploy.sh -i &lt;image&gt; [-w &lt;&#35;workers&gt;] [-v &lt;data_direc
 The script either starts a standalone Spark cluster or a standalone
 Spark/Shark cluster for a given number of worker nodes. Note that
 on the first call it may take a while for Docker to download the
-various image images from the repository,
+various images from the repository,
 
 In addition to Spark (and Shark) the cluster also runs a Hadoop HDFS
 filesystem. When the deploy script is run it generates one container
