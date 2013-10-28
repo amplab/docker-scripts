@@ -42,8 +42,8 @@ for the master node, one container for each worker node and one extra
 container running a Dnsmasq DNS forwarder. The latter one can also be
 used to resolve node names on the host, for example to access the
 worker logs via the Spark web UI. Each node also runs a sshd which is
-_pre-configured with the given ssh RSA key_. Note that you may want to
-change that key if you plan to use the image for anything serious.
+_pre-configured with the given RSA key_. Note that you should change
+this key if you plan to expose services running inside the containers.
 
 Optionally one can set the number of workers (default: 2) and a data directory
 which is a local path on the host that can be mounted on the master and
