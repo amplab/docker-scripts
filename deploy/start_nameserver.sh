@@ -23,12 +23,14 @@ function start_nameserver() {
 
 function wait_for_nameserver {
     echo -n "waiting for nameserver to come up "
-    # Note: the nameserver resolves its own hostname to 127.0.0.1
-    dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep 127.0.0.1 > /dev/null
+    # Note: original scripts assumed the nameserver resolves its own hostname to 127.0.0.1
+    # bmustafa (24601 on GitHub) has found this not to necessarily be the case 
+    # on Ubuntu Precise LTS...this fixes it...may break other platforms? 
+    dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep ${NAMESERVER_IP} > /dev/null
     until [ "$?" -eq 0 ]; do
         echo -n "."
         sleep 1
-        dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep 127.0.0.1 > /dev/null;
+        dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep ${NAMESERVER_IP} > /dev/null;
     done
     echo ""
 }
