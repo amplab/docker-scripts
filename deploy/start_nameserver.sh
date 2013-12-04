@@ -23,12 +23,15 @@ function start_nameserver() {
 
 function wait_for_nameserver {
     echo -n "waiting for nameserver to come up "
-    # Note: the nameserver resolves its own hostname to 127.0.0.1
-    dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep 127.0.0.1 > /dev/null
+    # Note: the original scripts assumed the nameserver resolves its own
+    # hostname to 127.0.0.1
+    # With newer versions of Docker that is not necessarily the case anymore.
+    # Thanks to bmustafa (24601 on GitHub) for reporting and proposing a fix!
+    dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep "${NAMESERVER_IP}\|127.0.0.1" > /dev/null
     until [ "$?" -eq 0 ]; do
         echo -n "."
         sleep 1
-        dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep 127.0.0.1 > /dev/null;
+        dig nameserver @${NAMESERVER_IP} | grep ANSWER -A1 | grep "${NAMESERVER_IP}\|127.0.0.1" > /dev/null;
     done
     echo ""
 }
