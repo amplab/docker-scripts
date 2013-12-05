@@ -26,7 +26,9 @@ if [[ "$clustertype" == "nameserver" ]]; then
 else
     master=$(sudo docker ps | grep ${clustertype}_master | awk '{print $1}' | tr '\n' ' ')
     workers=$(sudo docker ps | grep ${clustertype}_worker | awk '{print $1}' | tr '\n' ' ')
+    shells=$(sudo docker ps | grep ${clustertype}_shell | awk '{print $1}' | tr '\n' ' ')
     kill_containers "$master"
-    kill_containers "$workers"
+    kill_containers "$workers" 
+    kill_containers "$shells"
 fi
 
