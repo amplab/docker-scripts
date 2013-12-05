@@ -75,6 +75,8 @@ function parse_options() {
     fi
 }
 
+# TODO: generalize and refactor this with the code for updating
+# master and worker nameserver entries.
 function set_nameserver_data() {
     IMAGENAME="$image_name:$image_version"
     DNSDIR=$(sudo docker inspect $NAMESERVER_ID | \
