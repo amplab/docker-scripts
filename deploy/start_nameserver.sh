@@ -13,6 +13,12 @@ function start_nameserver() {
 
     echo "starting nameserver container"
     NAMESERVER=$(sudo docker run -d -h nameserver${DOMAINNAME} -v $DNSDIR:/etc/dnsmasq.d $1)
+
+    if [ "$NAMESERVER" = "" ]; then
+        echo "error: could not start nameserver container from image $1"
+        exit 1
+    fi
+
     echo "started nameserver container:  $NAMESERVER"
     echo "DNS host->IP file mapped:      $DNSFILE"
     sleep 2
