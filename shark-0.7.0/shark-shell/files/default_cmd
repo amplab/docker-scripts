@@ -4,4 +4,10 @@ source /root/shark_files/configure_shark.sh
 prepare_shark $1
 env
 sudo -u hdfs hadoop dfsadmin -safemode wait
+
+# Note: there are issues if the nameserver did not have time to
+# refresh its cache with this shell's hostname so give him time
+# to do so.
+sleep 3
+
 cd /opt/metastore && sudo -u hdfs /opt/shark-$SHARK_VERSION/bin/shark
