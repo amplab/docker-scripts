@@ -12,6 +12,9 @@ function start_nameserver() {
     mkdir $DNSDIR
 
     echo "starting nameserver container"
+    if [ "$DEBUG" -gt 0 ]; then
+        echo sudo docker run -d -h nameserver${DOMAINNAME} -v $DNSDIR:/etc/dnsmasq.d $1
+    fi
     NAMESERVER=$(sudo docker run -d -h nameserver${DOMAINNAME} -v $DNSDIR:/etc/dnsmasq.d $1)
 
     if [ "$NAMESERVER" = "" ]; then
