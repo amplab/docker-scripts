@@ -5,7 +5,6 @@ export SPARK_WORKER_CORES=1
 export SPARK_MEM=800m
 export SPARK_WORKER_MEMORY=1500m
 export SPARK_MASTER_MEM=1500m
-export SPARK_WORKER_CORES=1
 export SPARK_MASTER_IP=__MASTER__
 export HADOOP_HOME="/etc/hadoop"
 export MASTER="spark://__MASTER__:7077"
