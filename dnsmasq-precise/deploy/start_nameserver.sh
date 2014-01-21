@@ -10,6 +10,9 @@ function start_nameserver() {
     mkdir $DNSDIR
 
     echo "starting nameserver container"
+    if [ "$DEBUG" -gt 0 ]; then
+        echo sudo docker run -d -h nameserver -v $DNSDIR:/etc/dnsmasq.d dnsmasq-precise
+    fi
     NAMESERVER=$(sudo docker run -d -h nameserver -v $DNSDIR:/etc/dnsmasq.d dnsmasq-precise)
     echo "started nameserver container:  $NAMESERVER"
     echo "DNS host->IP file mapped:      $DNSFILE"
