@@ -1,5 +1,5 @@
-# Spark 0.8.0
-# Version 0.8.0
+# Spark 0.9.0
+# Version 0.9.0
 #
 FROM apache-hadoop-hdfs-precise:1.2.1
 
