@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export SCALA_HOME=/opt/scala-2.9.3
+export SCALA_HOME=/opt/scala-2.10.3
 export SPARK_HOME=__SPARK_HOME__
 export SPARK_WORKER_CORES=1
 export SPARK_MEM=800m
