@@ -10,7 +10,7 @@ image_type="?"
 
 DEBUG=1
 
-spark_shell_images=( "amplab/spark-shell:0.7.3" "amplab/spark-shell:0.8.0" )
+spark_shell_images=( "amplab/spark-shell:0.7.3" "amplab/spark-shell:0.8.0" "amplab/spark-shell:0.9.0")
 shark_shell_images=( "amplab/shark-shell:0.7.0" "amplab/shark-shell:0.8.0" )
 
 function check_root() {
@@ -141,10 +141,10 @@ if [ "$image_type" == "spark" ]; then
     echo "*** Starting Spark $SPARK_VERSION Shell ***"
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION="$image_version"
-    if [ "$SHARK_VERSION" == "0.8.0" ]; then
-        SPARK_VERSION="0.8.0"
+    if [ "$SHARK_VERSION" == "0.9.0" ]; then
+        SPARK_VERSION="0.9.0"
     else
-        SPARK_VERSION="0.7.3"
+        SPARK_VERSION="0.8.0"
     fi
     echo "*** Starting Shark $SHARK_VERSION + Spark Shell ***"
 else

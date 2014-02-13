@@ -6,7 +6,7 @@ if [[ "$USER" != "root" ]]; then
 fi
 
 BASEDIR=$(cd $(dirname $0); pwd)"/.."
-service_list=( "shark:0.8.0" "spark:0.8.0" "spark:0.7.3" "shark:0.7.0" )
+service_list=("spark:0.9.0" "shark:0.8.0" "spark:0.8.0" "spark:0.7.3" "shark:0.7.0" )
 
 IMAGE_PREFIX=""
 #"amplab/"

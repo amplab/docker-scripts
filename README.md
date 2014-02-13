@@ -32,8 +32,8 @@ $ sudo ./deploy/deploy.sh
 usage: ./deploy.sh -i &lt;image&gt; [-w &lt;&#35;workers&gt;] [-v &lt;data_directory&gt;] [-c]
 
   image:    spark or shark image from:
-                 amplab/spark:0.7.3  amplab/spark:0.8.0
-                 amplab/shark:0.7.0  amplab/shark:0.8.0
+                 amplab/spark:0.9.0  amplab/spark:0.8.0
+                 amplab/shark:0.7.3  amplab/shark:0.8.0
 </pre>
 
 The script either starts a standalone Spark cluster or a standalone
@@ -64,7 +64,7 @@ Starting from the directory in which the repository was cloned do
 
 #### Deploy the cluster
 
-	$ sudo ./deploy/deploy.sh -i amplab/spark:0.8.0 -w 3 
+	$ sudo ./deploy/deploy.sh -i amplab/spark:0.9.0 -w 3 
 
 #### Wait a few seconds
 
@@ -73,8 +73,8 @@ the container images the first time but after that the process is fairly quick.
 When the cluster comes up you should see something like this:
 
 <pre>
-> sudo ./deploy.sh -i amplab/spark:0.8.0 -w 3 
-*** Starting Spark 0.8.0 ***
+> sudo ./deploy.sh -i amplab/spark:0.9.0 -w 3 
+*** Starting Spark 0.9.0 ***
 starting nameserver container
 started nameserver container:  069557913d98a37caf43f8238dfdf181aea5ab30eb42e382db83307e277cfa9e
 DNS host->IP file mapped:      /tmp/dnsdir_12015/0hosts
@@ -94,7 +94,7 @@ started worker container:  3cdf681f7c99c1e19f7b580ac911e139923e9caca943fd006fb63
 waiting for workers to register .....
 
 ***********************************************************************
-start shell via:            sudo /home/andre/docker-scripts/deploy/start_shell.sh -i amplab/spark-shell:0.8.0 -n 069557913d98a37caf43f8238dfdf181aea5ab30eb42e382db83307e277cfa9e 
+start shell via:            sudo /home/andre/docker-scripts/deploy/start_shell.sh -i amplab/spark-shell:0.9.0 -n 069557913d98a37caf43f8238dfdf181aea5ab30eb42e382db83307e277cfa9e 
 
 visit Spark WebUI at:       http://172.17.0.9:8080/
 visit Hadoop Namenode at:   http://172.17.0.9:50070
@@ -111,7 +111,7 @@ nameserver 172.17.0.8
 
 #### Start the Spark shell container as shown above, for example:
 
-	$ sudo /home/andre/docker-scripts/deploy/start_shell.sh -i amplab/spark-shell:0.8.0 -n 069557913d98a37caf43f8
+	$ sudo /home/andre/docker-scripts/deploy/start_shell.sh -i amplab/spark-shell:0.9.0 -n 069557913d98a37caf43f8
 
 The parameter passed with -n is the ID of the nameserver container.
 Then attach to the running shell via the given command, for example:
