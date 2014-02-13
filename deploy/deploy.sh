@@ -3,7 +3,7 @@
 DEBUG=0
 BASEDIR=$(cd $(dirname $0); pwd)
 
-spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" )
+spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" "amplab/spark:0.9.0")
 shark_images=( "amplab/shark:0.7.0" "amplab/shark:0.8.0" )
 NAMESERVER_IMAGE="amplab/dnsmasq-precise"
 
@@ -96,10 +96,10 @@ if [ "$image_type" == "spark" ]; then
     echo "*** Starting Spark $SPARK_VERSION ***"
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION="$image_version"
-    if [ "$SHARK_VERSION" == "0.8.0" ]; then
-        SPARK_VERSION="0.8.0"
+    if [ "$SHARK_VERSION" == "0.9.0" ]; then
+        SPARK_VERSION="0.9.0"
     else
-        SPARK_VERSION="0.7.3"
+        SPARK_VERSION="0.8.0"
     fi
     echo "*** Starting Shark $SHARK_VERSION + Spark ***"
 else
