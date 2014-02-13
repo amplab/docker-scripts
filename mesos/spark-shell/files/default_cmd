@@ -13,4 +13,4 @@ sudo -u hdfs hadoop fs -put /tmp/test.txt hdfs://$1:9000/user/hdfs/test.txt
 
 echo "starting Spark Shell"
 cd $SPARK_HOME
-sudo -u hdfs HDFS_PREFIX=hdfs://${1}:9000 ./spark-shell
+sudo -u hdfs HDFS_PREFIX=hdfs://${1}:9000 ./bin/spark-shell
