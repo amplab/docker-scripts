@@ -22,4 +22,4 @@ sleep 3
 echo "starting Spark Shell"
 
 cd $SPARK_HOME
-sudo -u hdfs MASTER=spark://master:7077 HDFS_PREFIX=hdfs://master:9000 ./spark-shell
+sudo -u hdfs MASTER=spark://master:7077 HDFS_PREFIX=hdfs://master:9000 ./bin/spark-shell
