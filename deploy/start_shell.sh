@@ -10,9 +10,11 @@ image_type="?"
 
 DEBUG=1
 
+# TODO: remove redundant image list definition (source from file common to deploy.sh)
 spark_shell_images=( "amplab/spark-shell:0.7.3" "amplab/spark-shell:0.8.0" "amplab/spark-shell:0.9.0")
 shark_shell_images=( "amplab/shark-shell:0.7.0" "amplab/shark-shell:0.8.0" )
 
+# TODO: unify with deploy.sh
 function check_root() {
     if [[ "$USER" != "root" ]]; then
         echo "please run as: sudo $0"
@@ -141,10 +143,12 @@ if [ "$image_type" == "spark" ]; then
     echo "*** Starting Spark $SPARK_VERSION Shell ***"
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION="$image_version"
-    if [ "$SHARK_VERSION" == "0.9.0" ]; then
-        SPARK_VERSION="0.9.0"
+    # note: we currently don't have a Shark 0.9 image but it's safe Spark
+    # to Shark's version for all but Shark 0.7.0
+    if [ "$SHARK_VERSION" == "0.9.0" ] || [ "$SHARK_VERSION" == "0.8.0" ]; then
+        SPARK_VERSION="$SHARK_VERSION"
     else
-        SPARK_VERSION="0.8.0"
+        SPARK_VERSION="0.7.3"
     fi
     echo "*** Starting Shark $SHARK_VERSION + Spark Shell ***"
 else

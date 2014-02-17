@@ -96,10 +96,12 @@ if [ "$image_type" == "spark" ]; then
     echo "*** Starting Spark $SPARK_VERSION ***"
 elif [ "$image_type" == "shark" ]; then
     SHARK_VERSION="$image_version"
-    if [ "$SHARK_VERSION" == "0.9.0" ]; then
-        SPARK_VERSION="0.9.0"
+    # note: we currently don't have a Shark 0.9 image but it's safe Spark
+    # to Shark's version for all but Shark 0.7.0
+    if [ "$SHARK_VERSION" == "0.9.0" ] || [ "$SHARK_VERSION" == "0.8.0" ]; then
+        SPARK_VERSION="$SHARK_VERSION"
     else
-        SPARK_VERSION="0.8.0"
+        SPARK_VERSION="0.7.3"
     fi
     echo "*** Starting Shark $SHARK_VERSION + Spark ***"
 else

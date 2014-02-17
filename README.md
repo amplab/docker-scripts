@@ -32,7 +32,7 @@ $ sudo ./deploy/deploy.sh
 usage: ./deploy.sh -i &lt;image&gt; [-w &lt;&#35;workers&gt;] [-v &lt;data_directory&gt;] [-c]
 
   image:    spark or shark image from:
-                 amplab/spark:0.9.0  amplab/spark:0.8.0
+                 amplab/spark:0.7.3  amplab/spark:0.8.0  amplab/spark:0.9.0
                  amplab/shark:0.7.3  amplab/shark:0.8.0
 </pre>
 

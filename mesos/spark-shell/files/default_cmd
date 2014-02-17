@@ -15,7 +15,7 @@ echo "starting Spark Shell"
 cd $SPARK_HOME
 echo SPARK_HOME: `pwd`
 echo SHARK_VERSION: $SHARK_VERSION
-if [ "$SHARK_VERSION" == "0.8.0" ]; then
+if [ "$SPARK_VERSION" == "0.8.0" ] || [ "$SPARK_VERSION" == "0.7.3" ]; then
 	sudo -u hdfs HDFS_PREFIX=hdfs://${1}:9000 ./spark-shell
 else
 	sudo -u hdfs HDFS_PREFIX=hdfs://${1}:9000 ./bin/spark-shell
