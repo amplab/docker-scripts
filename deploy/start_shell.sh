@@ -119,9 +119,9 @@ function start_shell() {
     SHELL_HOSTNAME="shell$RANDOM"
     echo "starting shell container"
     if [ "$DEBUG" -gt 0 ]; then
-        echo sudo docker run -i -t -d -dns $NAMESERVER_IP -h $SHELL_HOSTNAME $VOLUME_MAP $IMAGENAME $MASTER_IP
+        echo sudo docker run -i -t -d --dns $NAMESERVER_IP -h $SHELL_HOSTNAME $VOLUME_MAP $IMAGENAME $MASTER_IP
     fi
-    SHELL_ID=$(sudo docker run -i -t -d -dns $NAMESERVER_IP -h $SHELL_HOSTNAME $VOLUME_MAP $IMAGENAME $MASTER_IP)
+    SHELL_ID=$(sudo docker run -i -t -d --dns $NAMESERVER_IP -h $SHELL_HOSTNAME $VOLUME_MAP $IMAGENAME $MASTER_IP)
 
     if [ "$SHELL_ID" = "" ]; then
         echo "error: could not start shell container from image $IMAGENAME"
