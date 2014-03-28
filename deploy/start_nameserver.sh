@@ -39,7 +39,7 @@ function check_hostname() {
     if which dig >/dev/null; then
         DNSCMD="dig $val_hostname @${NAMESERVER_IP} | grep ANSWER -A1 | grep $val_expected_ip > /dev/null"
     else
-        DNSCMD="nslookup $val_hostname $NAMESERVER_IP | grep \"Address:\" | tail -n 1 | grep $val_expected_ip > /dev/null"
+        DNSCMD="nslookup $val_hostname $NAMESERVER_IP | grep Address | tail -n 1 | grep $val_expected_ip > /dev/null"
     fi
     #echo "DNSCMD: $DNSCMD"
     eval $DNSCMD
@@ -53,7 +53,7 @@ function resolve_hostname() {
     if which dig >/dev/null; then
         DNSCMD="dig $val_hostname @${NAMESERVER_IP} | grep ANSWER -A1 | tail -n 1 | awk '{print \$5}'"
     else
-        DNSCMD="nslookup $val_hostname $NAMESERVER_IP | grep \"Address:\" | tail -n 1 | awk -F":" '{print \$2}' | awk '{print \$1}'"
+        DNSCMD="nslookup $val_hostname $NAMESERVER_IP | grep Address | tail -n 1 | awk -F":" '{print \$2}' | awk '{print \$1}'"
     fi
     #echo "DNSCMD: $DNSCMD"
     tmpval=$(eval "$DNSCMD")
