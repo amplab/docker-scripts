@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BASEDIR=$(cd $(dirname $0); pwd)
+source $BASEDIR/start_nameserver.sh
+
 SHELL_ID=-1
 SHELL_IP=
 NAMESERVER_IP=
@@ -108,8 +111,9 @@ function start_shell() {
         exit 1
     fi
 
-    MASTER_IP=$(dig master @$NAMESERVER_IP | grep ANSWER -A1 | \
-        tail -n 1 | awk '{print $5}')
+    #MASTER_IP=$(dig master @$NAMESERVER_IP | grep ANSWER -A1 | \
+    #    tail -n 1 | awk '{print $5}')
+    resolve_hostname MASTER_IP master
 
     if [ "$MASTER_IP" = "" ]; then
         echo "error: cannot determine master IP"
@@ -165,11 +169,12 @@ set_nameserver_data
 echo -n "waiting for nameserver to find shell "
 SHELL_IP=$(docker inspect $SHELL_ID | \
     grep IPAddress | awk '{print $2}' | tr -d '":,')
-dig $SHELL_HOSTNAME @${NAMESERVER_IP} | grep ANSWER -A1 | grep $SHELL_IP > /dev/null
-until [ "$?" -eq 0 ]; do
+
+check_hostname result $SHELL_HOSTNAME $SHELL_IP
+until [ "$result" -eq 0 ]; do
     echo -n "."
     sleep 1
-    dig $SHELL_HOSTNAME @${NAMESERVER_IP} | grep ANSWER -A1 | grep $SHELL_IP > /dev/null
+    check_hostname result $SHELL_HOSTNAME $SHELL_IP
 done
 
 echo ""

@@ -90,11 +90,11 @@ function wait_for_master {
     done
     echo ""
     echo -n "waiting for nameserver to find master "
-    dig master @${NAMESERVER_IP} | grep ANSWER -A1 | grep $MASTER_IP > /dev/null
-    until [ "$?" -eq 0 ]; do
+    check_hostname result master "$MASTER_IP"
+    until [ "$result" -eq 0 ]; do
         echo -n "."
         sleep 1
-        dig master @${NAMESERVER_IP} | grep ANSWER -A1 | grep $MASTER_IP > /dev/null;
+        check_hostname result master "$MASTER_IP"
     done
     echo ""
     sleep 3

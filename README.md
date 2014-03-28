@@ -7,7 +7,7 @@ development.
 
 ## Requirements
 
-Tested on Ubuntu 12.04 (Docker version 0.6.4) and Ubuntu 13.10 (Docker 0.7.0) with the virtual
+Tested on Ubuntu 12.04 (Docker version 0.6.4), Ubuntu 13.10 (Docker 0.7.0 and 0.9.0) with the virtual
 switch
 	lxcbr0
 enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker.io).
@@ -16,6 +16,16 @@ Note: the earlier version of the scripts had problems with newer
 versions of Docker (0.7). If you encounter issues please pull the
 latest changes from https://github.com/amplab/docker-scripts.git
 master branch.
+
+__Important!__ If you are running on Mac OS, installed as described
+[in the Docker installation docs](http://docs.docker.io/en/latest/installation/mac/)
+you need to run all commands inside the Docker virtual machine by first ssh-ing into it:
+
+<pre>
+$ ./boot2docker ssh
+# User: docker
+# Pwd:  tcuser
+</pre>
 
 ## Testing
 
@@ -208,7 +218,6 @@ shark> SELECT COUNT(1) FROM src;
 
 	$ sudo ./deploy/kill_all.sh shark
 	$ sudo ./deploy/kill_all.sh nameserver
-
 
 ## Building
 
