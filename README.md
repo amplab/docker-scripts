@@ -11,6 +11,8 @@ Tested on Ubuntu 12.04 (Docker version 0.6.4), Ubuntu 13.10 (Docker 0.7.0 and 0.
 switch
 	lxcbr0
 enabled. For running Docker on Mac and Windows see [the docs](http://docs.docker.io).
+Also tested inside the VirtualBox Tiny Core Linux VirtualBox VM for Docker on
+Mac.
 
 Note: the earlier version of the scripts had problems with newer
 versions of Docker (0.7). If you encounter issues please pull the
@@ -26,6 +28,9 @@ $ ./boot2docker ssh
 # User: docker
 # Pwd:  tcuser
 </pre>
+
+Then make sure that `python` is installed. Otherwise install it via
+`tce-ab` (search for python and install `python.tcz`).
 
 ## Testing
 
