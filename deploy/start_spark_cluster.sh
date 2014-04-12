@@ -70,7 +70,13 @@ function get_num_registered_workers() {
     if [[ "$SPARK_VERSION" == "0.7.3" ]]; then 
         DATA=$( curl --noproxy -s http://$MASTER_IP:8080/?format=json | tr -d '\n' | sed s/\"/\\\\\"/g)
     else
-        DATA=$( wget --no-proxy -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
+	# Docker on Mac uses tinycore Linux with busybox which has a limited version wget (?)
+	echo $(uname -a) | grep "Linux boot2docker" > /dev/null
+	if [[ "$?" == "0" ]]; then
+		DATA=$( wget -Y off -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
+	else
+        	DATA=$( wget --no-proxy -q -O - http://$MASTER_IP:8080/json | tr -d '\n' | sed s/\"/\\\\\"/g)
+	fi
     fi
     NUM_REGISTERED_WORKERS=$(python -c "import json; data = \"$DATA\"; value = json.loads(data); print len(value['workers'])")
 }
