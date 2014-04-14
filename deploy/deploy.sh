@@ -3,8 +3,8 @@
 DEBUG=0
 BASEDIR=$(cd $(dirname $0); pwd)
 
-spark_images=( "amplab/spark:0.7.3" "amplab/spark:0.8.0" "amplab/spark:0.9.0")
-shark_images=( "amplab/shark:0.7.0" "amplab/shark:0.8.0" )
+spark_images=( "amplab/spark:0.9.0")
+shark_images=( "amplab/shark:0.8.0" )
 NAMESERVER_IMAGE="amplab/dnsmasq-precise"
 
 start_shell=0
