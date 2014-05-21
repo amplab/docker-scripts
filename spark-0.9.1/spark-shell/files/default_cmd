@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source /root/spark_files/configure_spark.sh
+
+env
+
+echo "preparing Spark"
+prepare_spark "master"
+
+echo "adding test data to HDFS"
+cp /root/spark_shell_files/test.txt /tmp
+sudo -u hdfs hadoop dfsadmin -safemode wait
+sudo -u hdfs hadoop fs -put /tmp/test.txt hdfs://master:9000/user/hdfs/test.txt
+
+cp /root/spark_shell_files/test.spark /
+
+# Note: there are issues if the nameserver did not have time to
+# refresh its cache with this shell's hostname so give him time
+# to do so.
+sleep 3
+
+echo "starting Spark Shell"
+
+cd $SPARK_HOME
+sudo -u hdfs MASTER=spark://master:7077 HDFS_PREFIX=hdfs://master:9000 ./bin/spark-shell
