@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source /root/spark_files/configure_spark.sh
+
+IP=$(ip -o -4 addr list eth0 | perl -n -e 'if (m{inet\s([\d\.]+)\/\d+\s}xms) { print $1 }')
+echo "WORKER_IP=$IP"
+
+echo "preparing Spark"
+prepare_spark $1
+
+echo "starting Hadoop Datanode"
+service hadoop-datanode start
+
+echo "starting sshd"
+/usr/sbin/sshd
+
+sleep 5
+
+echo "starting Spark Worker"
+cp /root/spark_worker_files/run_spark_worker.sh /
+chmod a+rx /run_spark_worker.sh
+sudo -u hdfs /run_spark_worker.sh

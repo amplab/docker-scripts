@@ -84,15 +84,17 @@ function get_num_registered_workers() {
 function wait_for_master {
     if [[ "$SPARK_VERSION" == "0.7.3" ]]; then
         query_string="INFO HttpServer: akka://sparkMaster/user/HttpServer started"
+    elif [[ "$SPARK_VERSION" == "1.0.0" ]]; then
+        query_string="MasterWebUI: Started MasterWebUI"
     else
         query_string="MasterWebUI: Started Master web UI"
     fi
     echo -n "waiting for master "
     sudo docker logs $MASTER | grep "$query_string" > /dev/null
     until [ "$?" -eq 0 ]; do
-	echo -n "."
-	sleep 1
-	sudo docker logs $MASTER | grep "$query_string" > /dev/null;
+        echo -n "."
+        sleep 1
+        sudo docker logs $MASTER | grep "$query_string" > /dev/null;
     done
     echo ""
     echo -n "waiting for nameserver to find master "

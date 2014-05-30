@@ -1,0 +1,3 @@
+Many of the files here are in fact identical to the ones in the
+Spark 1.0.0 directory. However, since Docker does not follow
+symbolic links when it builds images we need the duplication.
