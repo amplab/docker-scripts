@@ -1,0 +1,5 @@
+val hdfs_prefix = System.getenv("HDFS_PREFIX")
+val textFile = sc.textFile(hdfs_prefix+"/user/hdfs/test.txt")
+textFile.count()
+textFile.map({line => line}).collect()
+exit

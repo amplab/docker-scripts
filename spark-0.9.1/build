@@ -1,0 +1,13 @@
+#!/bin/bash
+
+spark_dirs=$(ls -d spark*)
+dir_list=("$spark_dirs")
+
+# NOTE: the order matters but this is the right one
+for i in ${dir_list[@]}; do
+	echo building $i;
+	cd $i;
+	cat build;
+	. build;
+	cd ..;
+done
