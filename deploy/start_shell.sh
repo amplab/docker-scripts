@@ -14,7 +14,7 @@ image_type="?"
 DEBUG=1
 
 # TODO: remove redundant image list definition (source from file common to deploy.sh)
-spark_shell_images=( "amplab/spark-shell:0.9.0" )
+spark_shell_images=( "amplab/spark-shell:0.9.0" "amplab/spark-shell:0.9.1" "amplab/spark-shell:1.0.0")
 shark_shell_images=( "amplab/shark-shell:0.8.0" )
 
 # TODO: unify with deploy.sh

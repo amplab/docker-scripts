@@ -19,7 +19,8 @@ versions of Docker (0.7). If you encounter issues please pull the
 latest changes from https://github.com/amplab/docker-scripts.git
 master branch.
 
-__Important!__ If you are running on Mac OS, installed as described
+## Tips for running on Mac OS
+If you are running on Mac OS, installed as described
 [in the Docker installation docs](http://docs.docker.io/en/latest/installation/mac/)
 you need to run all commands inside the Docker virtual machine by first ssh-ing into it:
 
@@ -30,7 +31,18 @@ $ ./boot2docker ssh
 </pre>
 
 Then make sure that `python` is installed. Otherwise install it via
-`tce-ab` (search for python and install `python.tcz`).
+`tce-ab` (search for python and install `python.tcz`). Newer versions
+of the image that comes with boot2docker also do not have `bash` installed
+(install package `bash.tcz`) which is required for the deployment scripts.
+
+Further, make sure that your virtual machine running the Docker daemon and
+the containers has sufficient memory allocated (at least 2GB for two Spark worker
+containers and one master container). This can be done inside the Virtual Box
+GUI under the properties of the virtual machine.
+
+Finally, `boot2docker save` is a good way to perserve changes to the image
+between restarts of the virtual machine or host computer,
+for example the scripts come in the cloned git repository (see below). 
 
 ## Testing
 
@@ -61,9 +73,7 @@ filesystem. When the deploy script is run it generates one container
 for the master node, one container for each worker node and one extra
 container running a Dnsmasq DNS forwarder. The latter one can also be
 used to resolve node names on the host, for example to access the
-worker logs via the Spark web UI. Each node also runs a sshd which is
-_pre-configured with the given RSA key_. Note that you should change
-this key if you plan to expose services running inside the containers.
+worker logs via the Spark web UI.
 
 Optionally one can set the number of workers (default: 2) and a data directory
 which is a local path on the host that can be mounted on the master and
@@ -72,6 +82,16 @@ worker containers and will appear under /data.
 Both the Spark and Shark shells are started in a separate container.
 This container can be directly started from the deploy script by
 passing "-c" to the deploy script.
+
+Each node (worker and master) also runs a sshd which is
+_pre-configured with the given RSA key_. Note that you should change
+this key if you plan to expose services running inside the containers.
+Since the permissions of the key when cloned from the repository are
+likely wrong you need to change them if you intend to log in with ssh:
+
+<pre>
+chmod go -rwx apache-hadoop-hdfs-precise/files/id_rsa
+</pre>
 
 ### Example: Running a Spark cluster
 
